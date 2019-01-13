@@ -1,17 +1,25 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ImportantScripts.Interactables
 {
 	public class BushWithBerries : MonoBehaviour
 	{
-
 		public TypesOfBerries TypeOfBerries;
-		public int StateOfBerries;
-
+		public string StateOfBerries = "grown";
+		
+		//public readonly ObservableProperty<string> StateOfBerries = new ObservableProperty<string>("grown");
+		
 		private void Start()
 		{
-			StateOfBerries = 2;
 			UpdateTypeOfBerries();
+			
+			/*StateOfBerries.PropertyChanged += (sender, args) =>
+			{
+				
+			};
+		    */
 		}
 
 
@@ -22,7 +30,10 @@ namespace ImportantScripts.Interactables
 		}
 	
 		void Update () {
-		    
+			if (StateOfBerries == "grown")
+			{
+				
+			}
 		}
 	}
 }

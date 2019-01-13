@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Npc.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\NpcType.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\ObservableProperty.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Pistol.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Rocket.cs" />
