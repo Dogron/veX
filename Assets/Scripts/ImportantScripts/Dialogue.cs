@@ -91,7 +91,7 @@ namespace ImportantScripts
 				CanvasManager.CanvasManagerIn.DialogueTextNode.text = "";
 				foreach (var t in CanvasManager.CanvasManagerIn.DialogueTextAnswer)
 				{
-					t.text = "";
+					t.text = "empty text";
 				}
 			}
 		}
