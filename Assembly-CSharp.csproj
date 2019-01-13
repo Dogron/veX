@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\BushWithBerries.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Door.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\ExpendableResourceProvider.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\Interactables\NotExpendableResourceProvider.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Portal.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\QuestItem.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Resource.cs" />

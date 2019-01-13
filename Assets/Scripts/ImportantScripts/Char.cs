@@ -165,6 +165,7 @@ namespace ImportantScripts
                                     case ResourceType.Bush:
                                         var bushWithBerries = hitObject.GetComponent<BushWithBerries>();
                                         Heal(bushWithBerries.Collect());
+                                        print("SomeThing");
                                         break;
                                     case ResourceType.Money:
                                         Money += resource.Amount + Random.Range(-resource.Amount / 100 * 20,

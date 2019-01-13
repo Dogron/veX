@@ -12,7 +12,7 @@ namespace ImportantScripts.WeaponScripts
        
         private float _timePassed;
 
-        void Update()
+        private void Update()
         {
             var deltaTime = Time.deltaTime;
 
@@ -31,7 +31,7 @@ namespace ImportantScripts.WeaponScripts
                 if (enemy != null)
                 {
                     enemy.StartCoroutineDamage(1);
-                    Instantiate(TailOfBoom, transform.position, transform.rotation);
+                    Instantiate(TailOfBoom, hit.transform.position, hit.transform.rotation);
                 }
 
                 Destroy(gameObject);

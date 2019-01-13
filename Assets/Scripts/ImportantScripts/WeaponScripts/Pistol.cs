@@ -40,11 +40,9 @@ namespace ImportantScripts.WeaponScripts
                 _ammoNow += available;
                 return available;
             }
-            else
-            {
-                _ammoNow += missing;
-                return missing;
-            }
+
+            _ammoNow += missing;
+            return missing;
         }
     }
 }

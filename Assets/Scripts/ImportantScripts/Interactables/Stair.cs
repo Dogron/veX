@@ -1,7 +1,7 @@
 ﻿using ImportantScripts.Managers;
 using UnityEngine;
 
-namespace ImportantScripts
+namespace ImportantScripts.Interactables
 {
 	public class Stair : Interactable {
 
