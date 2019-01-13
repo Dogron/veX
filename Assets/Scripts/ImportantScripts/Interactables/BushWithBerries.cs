@@ -8,6 +8,7 @@ namespace ImportantScripts.Interactables
 	{
 		public TypesOfBerries TypeOfBerries;
 		public string StateOfBerries = "grown";
+		public GameObject Berries;
 		
 		//public readonly ObservableProperty<string> StateOfBerries = new ObservableProperty<string>("grown");
 		
@@ -28,12 +29,23 @@ namespace ImportantScripts.Interactables
 			var i = Random.Range(0, 1);
 			TypeOfBerries = i == 1 ? TypesOfBerries.Heal : TypesOfBerries.Poison;
 		}
-	
-		void Update () {
-			if (StateOfBerries == "grown")
+
+		public int Collect()
+		{
+			var amount = GetComponent<ExpendableResourceProvider>().Amount;
+			
+			switch (TypeOfBerries)
 			{
-				
+				case TypesOfBerries.Heal:
+					return amount;
+				case TypesOfBerries.Poison:
+					return -amount;
+				default:
+					UpdateTypeOfBerries();
+					break;
 			}
+
+			throw new InvalidOperationException();
 		}
 	}
 }

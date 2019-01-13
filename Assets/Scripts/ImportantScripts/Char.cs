@@ -163,20 +163,8 @@ namespace ImportantScripts
                                         }
                                         break;
                                     case ResourceType.Bush:
-                                        var j = hitObject.GetComponent<BushWithBerries>().TypeOfBerries;
-                                        
-                                        switch (j)
-                                        {
-                                            case TypesOfBerries.Heal:
-                                                Heal(resource.Amount);
-                                                break;
-                                            case TypesOfBerries.Poison:
-                                                Heal(-resource.Amount);
-                                                break;
-                                            default:
-                                                throw new ArgumentOutOfRangeException();
-                                        }
-
+                                        var bushWithBerries = hitObject.GetComponent<BushWithBerries>();
+                                        Heal(bushWithBerries.Collect());
                                         break;
                                     case ResourceType.Money:
                                         Money += resource.Amount + Random.Range(-resource.Amount / 100 * 20,
