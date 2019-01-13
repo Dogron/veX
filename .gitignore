@@ -1,0 +1,6 @@
+*.user
+obj
+*.app
+.idea
+Library
+Temp
