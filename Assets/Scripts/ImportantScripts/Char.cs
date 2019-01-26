@@ -157,7 +157,7 @@ namespace ImportantScripts
                                         RocketLauncherPickedUp = true;
                                         break;
                                     case ResourceType.QuestItem:
-                                        for (int i = 0; i < resource.Amount; i++)
+                                        for (var i = 0; i < resource.Amount; i++)
                                         {
                                             Inventory.Add(hitObject);
                                         }

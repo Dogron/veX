@@ -13,7 +13,6 @@ namespace ImportantScripts
 		public UnityEvent OnCompleteQuest;
 		public List<GameObject> ReqItemsForQuest;
 		public List<Answer> AnswersToShow; 
-		
 		public GameObject WhoIsTalking;
 		
 		private void OnTriggerExit(Collider other)
@@ -104,7 +103,6 @@ namespace ImportantScripts
 				if (CheckInventoryWithDelete(WhoIsTalking))
 				{
 					OnCompleteQuest.Invoke();
-					ShowDialogue = false;
 					WhoIsTalking.GetComponent<Char>()._inDialogue = false;
 				}
 			}
@@ -168,7 +166,6 @@ namespace ImportantScripts
 	{
 		public string NpcText;
 		public List<Answer> PlayerAnswers;
-		public bool IsQuestNode;
 	}
 	
 	[System.Serializable]
@@ -178,7 +175,12 @@ namespace ImportantScripts
 		public int ToNode;
 		public bool SpeakEnd;
 		public bool QuestCompleteAnswer;
+    }
+
+	[System.Serializable]
+	public class QuestAnswer : Answer
+	{
+		public List<GameObject> ReqItemsForQuest;
 	}
-	
-	
+
 }

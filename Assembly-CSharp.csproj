@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\ObservableProperty.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Pistol.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\RayGun.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Rocket.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\RocketLauncher.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\TailOfBoom.cs" />
