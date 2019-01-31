@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using ImportantScripts.CharScripts;
+using ImportantScripts.ItemsScripts;
 using ImportantScripts.Managers;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +13,7 @@ namespace ImportantScripts
 		public int CurrentNode;
 		public bool ShowDialogue = true;
 		public UnityEvent OnCompleteQuest;
-		public List<GameObject> ReqItemsForQuest;
+		public List<Item> ReqItemsForQuest;
 		public List<Answer> AnswersToShow; 
 		public GameObject WhoIsTalking;
 		
@@ -49,7 +51,7 @@ namespace ImportantScripts
 			{
 				if (answer.QuestCompleteAnswer)
 				{
-					if (CheckInventory(WhoIsTalking))
+					if (CheckInventory(WhoIsTalking,false))
 					{
 						AnswersToShow.Add(answer);
 					}
@@ -100,7 +102,7 @@ namespace ImportantScripts
 		{
 			if (playerAnswer.QuestCompleteAnswer)
 			{
-				if (CheckInventoryWithDelete(WhoIsTalking))
+				if (CheckInventory(WhoIsTalking,true))
 				{
 					OnCompleteQuest.Invoke();
 					WhoIsTalking.GetComponent<Char>()._inDialogue = false;
@@ -115,49 +117,28 @@ namespace ImportantScripts
 
 		}
 		
-		private bool CheckInventory(GameObject whoIsTalking)
+		private bool CheckInventory(GameObject whoIsTalking, bool withDelete)
 		{
-			var matchItems = new List<GameObject>();
-			var inventory = whoIsTalking.GetComponent<Char>().Inventory;
+			var matchItems = new List<Item>();
+			
+			var inventory = whoIsTalking.GetComponent<Inventory>();
 
 			foreach (var reqItem in ReqItemsForQuest)
 			{
-				foreach (var item in inventory)
+				foreach (var item in inventory.ItemsInInventory)
 				{
 					if (item != reqItem) continue;
+					
 					matchItems.Add(item);
+					if (withDelete)
+					{
+						inventory.RemoveFromInventory(item);
+					}
 					break;
 				}
 			}
 
 			return matchItems.Count == ReqItemsForQuest.Count;
-		}
-		
-		
-		private bool CheckInventoryWithDelete(GameObject whoIsTalking)
-		{
-			var matchItems = new List<GameObject>();
-			var inventory = whoIsTalking.GetComponent<Char>().Inventory;
-
-			foreach (var reqItem in ReqItemsForQuest)
-			{
-				foreach (var item in inventory)
-				{
-					if (item != reqItem) continue;
-					matchItems.Add(item);
-					break;
-				}
-			}
-
-			if (matchItems.Count != ReqItemsForQuest.Count)
-				return false;
-
-			foreach (var item in matchItems)
-			{
-				inventory.Remove(item);
-			}
-
-			return true;
 		}
 	}
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ImportantScripts.CharScripts;
 using ImportantScripts.Interactables;
+using ImportantScripts.ItemsScripts;
 using ImportantScripts.Managers;
 using ImportantScripts.NPCScripts;
 using ImportantScripts.WeaponScripts;
@@ -12,7 +14,8 @@ namespace ImportantScripts
 {
     public class Char : MonoBehaviour
     {
-       
+        public List<Item> AddedItems;
+        
         public GameObject HeadNeckChar;
 
         public IWeapon CurrentWeapon;
@@ -24,7 +27,7 @@ namespace ImportantScripts
         public float Speed;
         private float _speed;
 
-        public List<GameObject> Inventory;
+        public Inventory Inventory;
         
         public int JumpPower;
         public int MaxHp;
@@ -156,12 +159,6 @@ namespace ImportantScripts
                                     case ResourceType.RocketLauncher:
                                         RocketLauncherPickedUp = true;
                                         break;
-                                    case ResourceType.QuestItem:
-                                        for (var i = 0; i < resource.Amount; i++)
-                                        {
-                                            Inventory.Add(hitObject);
-                                        }
-                                        break;
                                     case ResourceType.Bush:
                                         var bushWithBerries = hitObject.GetComponent<BushWithBerries>();
                                         Heal(bushWithBerries.Collect());
@@ -222,13 +219,47 @@ namespace ImportantScripts
                 HpNow += missing;
             }
         }
-
-        private void OnTriggerExit(Collider other)
+        
+        private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.GetComponent<Npc>() != null)
+            var provider = other.gameObject.GetComponent<ItemProvider>();
+		
+            if (provider != null)
             {
-                _inDialogue = false;
+                print("Provider != null");
+               
+                var resource = provider.Consume();
+		
+                if (resource != null)
+                {
+                    print("Resource != null");
+				
+                    foreach (var item in resource)
+                    {
+                        if (Inventory.SizeOfInventory > Inventory.ItemsInInventory.Count)
+                        {
+                            print("Added to inventory???");
+                            Inventory.AddToInventory(item);
+                            AddedItems.Add(item);
+                            item.ItemGameObject.SetActive(false);
+                        }
+
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    foreach (var t in AddedItems)
+                    {
+                        provider.ItemsInProvider.Remove(t);
+					
+                    }
+				
+                    AddedItems.Clear();
+                }
             }
         }
+        
     }
 }
