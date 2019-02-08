@@ -27,7 +27,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1162497314118010
 GameObject:
@@ -38,13 +38,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4472548161988264}
   - component: {fileID: 65357045662789824}
-  - component: {fileID: 114725562603520218}
+  - component: {fileID: 114908989803550146}
   m_Layer: 0
   m_Name: AmmoBulletsPack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1203480833135414
 GameObject:
@@ -62,7 +62,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1297707830698408
 GameObject:
@@ -80,7 +80,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1492149883628886
 GameObject:
@@ -98,7 +98,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4300991661114906
 Transform:
@@ -119,8 +119,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1162497314118010}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.2799997, y: 1.2100003, z: -2.6}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: -0.9838724, y: -1.162, z: -2.7275753}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4575149710295198}
@@ -397,7 +397,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114725562603520218
+--- !u!114 &114908989803550146
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -405,8 +405,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1162497314118010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16bf20d456cf4e6eb80f0b537b9772fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 963750265a574c04a119c185ad96a68a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 1
-  Amount: 100
+  ItemsInProvider:
+  - ItemGameObject: {fileID: 0}
+    AmountOfItem: 0
+    InfoAbout: 
+    AmountOfResource: 0
+    IsUseble: 0
+    MoneyCost: 0
+    ItemType: 0
+    IsItNoStaking: 0
+    IDofObject: 2

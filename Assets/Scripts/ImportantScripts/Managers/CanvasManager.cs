@@ -1,4 +1,6 @@
-﻿using ImportantScripts.CharScripts;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ImportantScripts.CharScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,33 +10,37 @@ namespace ImportantScripts.Managers
 	public class CanvasManager : MonoBehaviour
 	{
 	    public static CanvasManager CanvasManagerIn;
+
+		public GameObject DialougePanel;
 		
 		public GameObject AmmoText;
 		public GameObject HealthText;
-		public GameObject DialogueText;
-
-		public Text DialogueTextText;
 
 		public Text DialogueTextNode;
 		public Text[] DialogueTextAnswer;
 
 		public GameObject InventorySpace;
-		public GameObject[] InventoryGrid;
-		public GameObject InfoButton;
+		public List<GameObject> InventoryGrid;
 		public GameObject InfoText;
 		public GameObject TheGridWhatHaveBeenChosed;
 		public Selectable FirstElementToFocus;
+		public GameObject HelpPanelInventory;
 		
 		private void Awake()
 		{
 			CanvasManagerIn = this;
-
 		}
 
 		private void Start()
 		{
 			InventoryOnOff(false);
 			Cursor.visible = false;
+
+			var listofinventorygrid = InventorySpace.GetComponentsInChildren<InventoryGrid>();
+			foreach (var invgrid in listofinventorygrid)
+			{
+				InventoryGrid.Add(invgrid.gameObject);
+			}
 		}
 
 		public void InventoryOnOff(bool onOff)
@@ -51,6 +57,7 @@ namespace ImportantScripts.Managers
 		private void Update()
 		{
 			var weapon = Char.CharIn.CurrentWeapon;
+			
 			if (weapon == null)
 			{
 				AmmoText.GetComponent<Text>().text = "No weapon";
@@ -61,7 +68,7 @@ namespace ImportantScripts.Managers
 			}
 
 			HealthText.GetComponent<Text>().text = Char.CharIn.HpNow + "/" + Char.CharIn.MaxHp + "   HP";
-			
+
 			if (Input.GetKeyDown(KeyCode.I))
 			{
 				var isActive = InventorySpace.activeInHierarchy;
@@ -72,39 +79,59 @@ namespace ImportantScripts.Managers
 					UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
 				}
 			}
-
-			if (Input.GetKeyDown(KeyCode.KeypadEnter))
+			
+			if (InventorySpace.activeInHierarchy)
 			{
-				if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
+				if (Input.GetKeyDown(KeyCode.C))
 				{
-					TheGridWhatHaveBeenChosed = EventSystem.current.currentSelectedGameObject;
+					print("Enter has pressed");
+				
+					if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
+					{
+						print("The Grid has been Chosed");
+					
+						TheGridWhatHaveBeenChosed = EventSystem.current.currentSelectedGameObject;
+
+						HelpPanelInventory.SetActive(true);
+						HelpPanelInventory.transform.position =
+							TheGridWhatHaveBeenChosed.transform.position + new Vector3(80, 0, 0);
+
+					}
+				}
+
+				if (Input.GetKeyDown(KeyCode.K))
+				{
+					print("K has pressed");
+					
+					InfoText.GetComponent<Text>().text = TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null ? TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.InfoAbout : "";
+					HelpPanelInventory.SetActive(false);
+				}
+
+				if (Input.GetKeyDown(KeyCode.L))
+				{
+					if (TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null)
+					{
+						Char.CharIn.OnUseItem(TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid);
+					}
+					
+					HelpPanelInventory.SetActive(false);
+				}
+
+				if (Input.GetKeyDown(KeyCode.R))
+				{
+					TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.AmountOfItem -= 1;
+					
+					HelpPanelInventory.SetActive(false);
 				}
 			}
-
-			if (Input.GetKeyDown(KeyCode.K))
-			{
-				InfoText.GetComponent<Text>().text = TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null ? TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.InfoAbout : "";
-			}
-
-			if (Input.GetKeyDown(KeyCode.L))
-			{
-				if (TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null)
-				{
-					TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.OnUse();
-				}
-			}
-
-			if (Input.GetKeyDown(KeyCode.R))
-			{
-				TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.Amount -= 1;
-			}
+			
 		}
 
 		public void UpdateInventory(Inventory inventory)
 		{
-			for (var i = 0; i < InventoryGrid.Length; i++)
+			for (var i = 0; i < InventoryGrid.Count; i++)
 			{
-				InventoryGrid[i].GetComponent<InventoryGrid>().ItemInThisGrid = inventory.ItemsInInventory.Count > i ? inventory.ItemsInInventory[i] : null;
+			InventoryGrid[i].GetComponent<InventoryGrid>().ItemInThisGrid = inventory.ItemsInInventory.Count > i ? inventory.ItemsInInventory[i] : null;
 			}
 		
 			foreach (var grid in InventoryGrid)

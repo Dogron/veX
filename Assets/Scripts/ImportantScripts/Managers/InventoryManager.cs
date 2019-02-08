@@ -66,12 +66,6 @@ namespace ImportantScripts.Managers
             InfoText.GetComponent<Text>().text = TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null ? TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.InfoAbout : "";
         }
 
-        public void OnButtonUsePressed()
-        {
-            if (TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null)
-            {
-                TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.OnUse();
-            }
-        }
+       
     }
 }

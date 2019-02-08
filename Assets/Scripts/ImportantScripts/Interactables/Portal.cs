@@ -9,6 +9,16 @@ namespace UselessScripts
     
         public Vector3 ShiftPos;
 
+        public bool IsWorking;
+
+        public ParticleSystem ParticleSystem;
+
+        private void Start()
+        {
+            ParticleSystem = GetComponentInChildren<ParticleSystem>();
+        }
+
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -17,9 +27,18 @@ namespace UselessScripts
             }
         }
 
+        public void Fix()
+        {
+            IsWorking = true;
+           
+        }
+        
         public void Tp()
         {
-            GameManager.GameManagerIn.Char.transform.position = ExitZone.transform.position + ShiftPos;
+            if (IsWorking)
+            {
+                GameManager.GameManagerIn.Char.transform.position = ExitZone.transform.position + ShiftPos; 
+            }
         }
     }
 }

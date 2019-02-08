@@ -58,14 +58,12 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\ImportantScripts\CharScripts\Char.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\CharScripts\Inventory.cs" />
-    <Compile Include="Assets\Scripts\ImportantScripts\Dialogue.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\FlyCamera.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\BushWithBerries.cs" />
-    <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Door.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Damagable.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\ExpendableResourceProvider.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\NotExpendableResourceProvider.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Portal.cs" />
-    <Compile Include="Assets\Scripts\ImportantScripts\Interactables\QuestItem.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\Resource.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\ResourceProvider.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Interactables\ResourceType.cs" />
@@ -75,12 +73,18 @@
     <Compile Include="Assets\Scripts\ImportantScripts\ItemsScripts\ExpandableItemProvider.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\ItemsScripts\Item.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\ItemsScripts\ItemProvider.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\ItemsScripts\ItemsTypes.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\ItemsScripts\TradeItemProvider.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\CanvasManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\EnemiesManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\InventoryManager.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Dialogue.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\NpcType.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\JamesNpc.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\TraderRobotCharacterNPC.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\TraderRobotNpc.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\ObservableProperty.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\WeaponScripts\Pistol.cs" />

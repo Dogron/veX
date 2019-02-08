@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ImportantScripts.Interactables;
+using UnityEngine;
 
 namespace ImportantScripts.WeaponScripts
 {
@@ -27,8 +28,18 @@ namespace ImportantScripts.WeaponScripts
             if (Physics.Raycast(transform.position, transform.forward, out hit, Speed * deltaTime))
             {
                 var enemy = hit.collider.gameObject.GetComponent<Enemy>();
-               
-                if (enemy != null)
+
+                if (enemy == null)
+                {
+                    var damagable = hit.collider.gameObject.GetComponent<Damagable>();
+                    if (damagable != null)
+                    {
+                        damagable.TakeDamage(Damage);
+                    }
+                   
+                }
+
+                else if (enemy != null)
                 {
                     enemy.StartCoroutineDamage(1);
                     Instantiate(TailOfBoom, hit.transform.position, hit.transform.rotation);

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using ImportantScripts.Interactables;
 using UnityEngine;
 
 namespace ImportantScripts.WeaponScripts
@@ -47,12 +48,25 @@ namespace ImportantScripts.WeaponScripts
 		private void OnTriggerEnter(Collider other)
         {
 			         print("BlaBlaBLa");
-			         
-			         if (other.gameObject.GetComponent<Enemy>() != null)
-			         {
-				         other.gameObject.GetComponent<Enemy>().StartCoroutineDamage(Damage);
-				         Destroy(gameObject);
-			         }
+
+	        var enemy = other.gameObject.GetComponent<Enemy>();
+	        
+	        if (enemy == null)
+	        {
+		        var damagable = other.gameObject.GetComponent<Damagable>();
+		        if (damagable != null)
+		        {
+			        damagable.TakeDamage(Damage);
+		        }
+                   
+	        }
+
+	        else if (enemy != null)
+	        {
+		        enemy.StartCoroutineDamage(1);
+		        Instantiate(TailOfBoom, other.gameObject.transform.position, other.gameObject.transform.rotation);
+	        }
+
 		}
 	}
 	

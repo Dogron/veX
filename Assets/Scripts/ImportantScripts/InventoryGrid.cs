@@ -23,7 +23,7 @@ namespace ImportantScripts
         {
             if (ItemInThisGrid != null)
             {
-                if (ItemInThisGrid.Amount <= 0)
+                if (ItemInThisGrid.AmountOfItem <= 0)
                 {
                     ItemInThisGrid = null;
                 }
@@ -36,7 +36,7 @@ namespace ImportantScripts
         {
             if (ItemInThisGrid != null)
             {
-                GetComponentInChildren<Text>().text = ItemInThisGrid.Amount + "   " + ItemInThisGrid.Name;
+                GetComponentInChildren<Text>().text = ItemInThisGrid.AmountOfItem + "   " + ItemInThisGrid.Name;
             }
 
             else

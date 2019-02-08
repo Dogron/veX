@@ -1044,8 +1044,11 @@ MonoBehaviour:
   Hp: 10
   AttackPower: 1
   ReloadSpeed: 3
+  LootOnEnemy: []
+  LootPocket: {fileID: 1023797059796234, guid: 64f89ee0626fb48529105b8bdc2905c2, type: 2}
   AllMatInChildren: []
   AllColorsInChildren: []
+  HowManyLootOnEnemy: 0
 --- !u!195 &195180103491615552
 NavMeshAgent:
   m_ObjectHideFlags: 1

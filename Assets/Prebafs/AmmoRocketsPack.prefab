@@ -38,7 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4939903828264932}
   - component: {fileID: 65595425939990966}
-  - component: {fileID: 114503869869833412}
+  - component: {fileID: 114516786005260256}
   m_Layer: 0
   m_Name: AmmoRocketsPack
   m_TagString: Untagged
@@ -97,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1304957077440708}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 1.2, z: -3}
+  m_LocalPosition: {x: 1.082, y: -1.232, z: -2.6000004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4242677781494440}
@@ -225,7 +225,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114503869869833412
+--- !u!114 &114516786005260256
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,8 +233,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1304957077440708}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16bf20d456cf4e6eb80f0b537b9772fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 963750265a574c04a119c185ad96a68a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  Amount: 100
+  ItemsInProvider:
+  - ItemGameObject: {fileID: 1304957077440708}
+    AmountOfItem: 1
+    InfoAbout: Pack with rockets
+    AmountOfResource: 10
+    IsUseble: 1
+    MoneyCost: 15
+    ItemType: 6
+    IsItNoStaking: 0
+    IDofObject: 3

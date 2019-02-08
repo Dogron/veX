@@ -1,5 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using ImportantScripts.ItemsScripts;
 using ImportantScripts.Managers;
+using ResourcesAndItems;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,31 +20,57 @@ namespace ImportantScripts
 		public int AttackPower;
 		public int ReloadSpeed;
 
+		public List<Item> LootOnEnemy;
+
+		public GameObject LootPocket;
+		
 		public Material[] AllMatInChildren;
 		public Color[] AllColorsInChildren;
-		
-		private void Start()
+
+		public int HowManyLootOnEnemy;
+
+		public void ChooseHowManyLootOnEnemy()
 		{
-			
+			HowManyLootOnEnemy = Random.Range(1, 4);
 		}
 
 
 		private void Update ()
-		
 		{
 			Agent.SetDestination(GameManager.GameManagerIn.Char.transform.position);
 
 			if (Hp <= 0)
 			{
-				Destroy(gameObject);
-			}
-
-			if (Hp <= 0)
-			{
+				DropLoot();
 				Destroy(gameObject);
 			}
 		}
 
+		public void SetLootOnEnemy(List<Item> items)
+		{
+			for (int i = 0; i < HowManyLootOnEnemy; i++)
+			{
+				LootOnEnemy.Add(items[Random.Range(0,items.Count)]);
+			}
+		}
+		
+		
+		public void DropLoot()
+		{
+			var lootPocket = Instantiate(LootPocket);
+			lootPocket.transform.position = gameObject.transform.position;
+			RaycastHit hit;
+			Physics.Raycast(lootPocket.transform.position, -lootPocket.transform.up, out hit);
+			lootPocket.transform.position = hit.transform.position;
+			
+			var lootInLootPocket = lootPocket.GetComponent<ExpandableItemProvider>();
+			
+			foreach (var loot in LootOnEnemy)
+			{
+				lootInLootPocket.ItemsInProvider.Add(loot);
+			}
+		}
+		
 		private void OnTriggerEnter(Collider other)
 		{
 			if (!_canAttack) return;

@@ -6,7 +6,7 @@ namespace ImportantScripts.Interactables
         
         public override Resource Consume()
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             return new Resource(Amount, Type);
         }
     }
