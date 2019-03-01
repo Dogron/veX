@@ -9,5 +9,7 @@ namespace ImportantScripts.ItemsScripts
         PocketWithMoney,
         Bullet,
         Rocket,
+        Xp,
+        Drone,
     }
 }

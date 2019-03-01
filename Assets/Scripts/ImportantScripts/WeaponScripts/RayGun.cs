@@ -21,7 +21,7 @@ namespace ImportantScripts.WeaponScripts
             get { return "RayGun"; }
         }
 
-        public void Fire(Vector3 position, Quaternion rotation)
+        public void Fire(Vector3 position, Quaternion rotation, int AdditionalDamage)
         {
             throw new System.NotImplementedException();
         }

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using ImportantScripts.CharScripts;
 using UnityEngine;
 
-namespace ImportantScripts.NPCScripts
+namespace ImportantScripts.NPCScripts.SpecialNPC
 {
     public class JamesNpc : Dialogue
     {
@@ -29,13 +30,12 @@ namespace ImportantScripts.NPCScripts
         {
             base.OnDialogueStart(whoistalking);
 
-            if (IsQuestComplete)
-            {
-                DialougeAfterQuestComplete.enabled = true;
-                DialougeAfterQuestComplete.OnDialogueStart(whoistalking);
-                OnDialougeEnd();
-                enabled = false;
-            }
+            if (!IsQuestComplete) return;
+            
+            DialougeAfterQuestComplete.enabled = true;
+            OnDialougeEnd();
+            DialougeAfterQuestComplete.OnDialogueStart(whoistalking);
+            enabled = false;
         }
     }  
 }

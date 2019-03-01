@@ -20,12 +20,7 @@ namespace ImportantScripts.NPCScripts
 		public DialogueNode currentNode;
 		public bool IsQuestComplete;
 		
-		public void OnTriggerExit(Collider other)
-		{
-			if (other.gameObject.GetComponent<Char>() == null) return;
-			OnDialougeEnd();
-		}
-
+		
 		public virtual void OnDialogueStart(GameObject whoistalking)
 		{
 			WhoIsTalking = whoistalking;
@@ -42,7 +37,8 @@ namespace ImportantScripts.NPCScripts
 				t.text = "";
 			}
 			ShowDialogue = false;
-			WhoIsTalking.GetComponent<Char>()._inDialogue = false;
+			WhoIsTalking.GetComponent<Char>().InDialogue = false;
+			CanvasManager.CanvasManagerIn.DialougePanel.SetActive(false);
 		}
 		public virtual void OnQuestComplete()
 		{

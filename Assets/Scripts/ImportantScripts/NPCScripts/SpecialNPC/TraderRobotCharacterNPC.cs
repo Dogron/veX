@@ -12,7 +12,8 @@ namespace ImportantScripts.NPCScripts.SpecialNPC
         public override void OnQuestComplete()
         {
             base.OnQuestComplete();
-            Node.Add(new DialogueNode("And if you will need to fix the portal in the future, you can use my instruments. Here there are.",  NewAnswerAfterCompleteQuest));
+            Node.Add(new DialogueNode("Thanks, that drone will help you with the... ERROR! REBOOT! REBOOT!",  NewAnswerAfterCompleteQuest));
+            
         }
 
 
@@ -22,8 +23,8 @@ namespace ImportantScripts.NPCScripts.SpecialNPC
             if (IsQuestComplete)
             {
                 DialougeAfterQuestComplete.enabled = true;
-                DialougeAfterQuestComplete.OnDialogueStart(whoistalking);
                 OnDialougeEnd();
+                DialougeAfterQuestComplete.OnDialogueStart(whoistalking);
                 enabled = false;
             }
         }

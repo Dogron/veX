@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ImportantScripts.CharScripts;
+using ImportantScripts.ItemsScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -25,6 +26,16 @@ namespace ImportantScripts.Managers
 		public GameObject TheGridWhatHaveBeenChosed;
 		public Selectable FirstElementToFocus;
 		public GameObject HelpPanelInventory;
+
+		public GameObject SkillsPanelSpace;
+		public GameObject TheSkillWhatHaveBeenChosed;
+		public Selectable FirstSkillElementToFocus;
+		public GameObject CurrentAmountOfSkillPoints;
+
+		
+		
+		public GameObject XpText;
+		
 		
 		private void Awake()
 		{
@@ -54,8 +65,51 @@ namespace ImportantScripts.Managers
 			}
 		}
 
+		public void SkillsPanelOnOff(bool onOff)
+		{
+			SkillsPanelSpace.SetActive(onOff);
+
+			if (onOff)
+			{
+				FirstSkillElementToFocus.Select();
+			}
+		}
+		
 		private void Update()
 		{
+			if (Input.GetKeyDown(KeyCode.P))
+			{
+				SkillsPanelOnOff(!SkillsPanelSpace.activeInHierarchy);
+				InventoryOnOff(false);
+			}
+
+			if (Input.GetKeyDown(KeyCode.I))
+			{
+				var isActive = InventorySpace.activeInHierarchy;
+				InventoryOnOff(!isActive);
+           
+				if (InventorySpace.activeInHierarchy)
+				{
+					UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
+				}
+				
+				SkillsPanelOnOff(false);
+			}
+			
+			
+			if (SkillsPanelSpace.activeInHierarchy)
+			{
+				if (Input.GetKeyDown(KeyCode.C))
+				{
+					if (EventSystem.current.currentSelectedGameObject.GetComponent<SkillsPanelGrid>() != null)
+					{
+						Char.CharIn.StatsUp(EventSystem.current.currentSelectedGameObject.GetComponent<SkillsPanelGrid>().WhatSkillIsThat);
+					}
+				}
+
+				CurrentAmountOfSkillPoints.GetComponent<Text>().text = "Amount of skill points : " + Char.CharIn.CurrAmountOfSkillPoints.ToString();
+			}
+			
 			var weapon = Char.CharIn.CurrentWeapon;
 			
 			if (weapon == null)
@@ -69,16 +123,8 @@ namespace ImportantScripts.Managers
 
 			HealthText.GetComponent<Text>().text = Char.CharIn.HpNow + "/" + Char.CharIn.MaxHp + "   HP";
 
-			if (Input.GetKeyDown(KeyCode.I))
-			{
-				var isActive = InventorySpace.activeInHierarchy;
-				InventoryOnOff(!isActive);
-           
-				if (InventorySpace.activeInHierarchy)
-				{
-					UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
-				}
-			}
+			XpText.GetComponent<Text>().text = Char.CharIn.Xp + "/" + Char.CharIn.XpReqForNewLvl + "   xp";
+			
 			
 			if (InventorySpace.activeInHierarchy)
 			{
@@ -104,6 +150,7 @@ namespace ImportantScripts.Managers
 					print("K has pressed");
 					
 					InfoText.GetComponent<Text>().text = TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null ? TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.InfoAbout : "";
+					
 					HelpPanelInventory.SetActive(false);
 				}
 

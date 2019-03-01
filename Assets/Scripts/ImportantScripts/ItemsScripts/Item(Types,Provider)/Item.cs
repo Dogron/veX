@@ -42,16 +42,18 @@ namespace ImportantScripts.ItemsScripts
         }
 
         public Item(GameObject itemGameObject, int amountOfItem, string infoAbout, int amountOfResource, 
-            bool isUseble, int moneyCost, ItemsTypes itemType, int idDofObject)
+            bool isUseble, int moneyCost, ItemsTypes itemType, int idDofObject, bool isItNoStaking)
         {
             ItemGameObject = itemGameObject;
             AmountOfItem = amountOfItem;
             InfoAbout = infoAbout;
-            AmountOfResource = amountOfItem;
+            AmountOfResource = amountOfResource;
             IsUseble = isUseble;
             MoneyCost = moneyCost;
             ItemType = itemType;
             IDofObject = idDofObject;
+            IsItNoStaking = isItNoStaking;
+
         }
     }
 }

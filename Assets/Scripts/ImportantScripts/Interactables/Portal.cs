@@ -16,6 +16,7 @@ namespace UselessScripts
         private void Start()
         {
             ParticleSystem = GetComponentInChildren<ParticleSystem>();
+            ParticleSystem.gameObject.SetActive(false);
         }
 
 
@@ -30,7 +31,7 @@ namespace UselessScripts
         public void Fix()
         {
             IsWorking = true;
-           
+            ParticleSystem.gameObject.SetActive(true);
         }
         
         public void Tp()

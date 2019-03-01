@@ -13,6 +13,12 @@ namespace ImportantScripts.CharScripts
 
         public void AddToInventory(Item item)
         {
+            if (item.ItemType == ItemsTypes.Xp)
+            {
+              gameObject.GetComponent<Char>().GetXp(item.AmountOfResource);
+              return;
+            }
+            
             if (item.IsItNoStaking == false)
             {
                 foreach (var itemInInventory in ItemsInInventory)
@@ -22,7 +28,7 @@ namespace ImportantScripts.CharScripts
                         if (itemInInventory.IDofObject != item.IDofObject) continue;
                         if (item.ItemType == ItemsTypes.PocketWithMoney)
                         {
-                            itemInInventory.AmountOfResource += item.AmountOfResource;
+                            itemInInventory.AmountOfResource += item.AmountOfResource * item.AmountOfItem;
                             return;
                         }
                 
@@ -30,9 +36,14 @@ namespace ImportantScripts.CharScripts
                         return; 
                     }
                 }
-            } 
+            }
+
+            if (item.ItemType == ItemsTypes.PocketWithMoney)
+            {
+                ItemsInInventory.Add(new Item(item.ItemGameObject,1,item.InfoAbout,item.AmountOfItem * item.AmountOfResource,item.IsUseble,item.MoneyCost,item.ItemType,item.IDofObject,item.IsItNoStaking)); 
+            }
             
-            ItemsInInventory.Add(new Item(item.ItemGameObject,item.AmountOfItem,item.InfoAbout,item.AmountOfItem,item.IsUseble,item.MoneyCost,item.ItemType,item.IDofObject));
+            ItemsInInventory.Add(new Item(item.ItemGameObject,item.AmountOfItem,item.InfoAbout,item.AmountOfResource,item.IsUseble,item.MoneyCost,item.ItemType,item.IDofObject,item.IsItNoStaking));
         }
 
         public void RemoveFromInventory(Item item)

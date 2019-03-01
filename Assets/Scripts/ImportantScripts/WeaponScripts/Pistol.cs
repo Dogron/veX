@@ -23,13 +23,14 @@ namespace ImportantScripts.WeaponScripts
             get { return "Pistol"; }
         }
 
-        public void Fire(Vector3 position, Quaternion rotation)
+        public void Fire(Vector3 position, Quaternion rotation,int additionalDamage)
         {
             if (_ammoNow == 0)
                 return;
 
             _ammoNow--;
-            Instantiate(Bullet, position, rotation);
+           var bullet = Instantiate(Bullet, position, rotation);
+            bullet.GetComponent<Bullet>().Damage += additionalDamage;
         }
 
         public int Reload(int available)

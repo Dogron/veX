@@ -1,4 +1,4 @@
-namespace ImportantScripts.NPCScripts
+namespace ImportantScripts.NPCScripts.SpecialNPC
 {
     public class TraderRobotNpc : Dialogue
     {

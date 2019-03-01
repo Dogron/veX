@@ -1,5 +1,8 @@
 ﻿using System.Collections;
+using ImportantScripts.CharScripts;
 using ImportantScripts.Interactables;
+using ImportantScripts.NPCScripts;
+using ImportantScripts.NPCScripts.EnemiesScripts;
 using UnityEngine;
 
 namespace ImportantScripts.WeaponScripts

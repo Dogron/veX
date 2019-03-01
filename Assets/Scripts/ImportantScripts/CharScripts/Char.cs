@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ImportantScripts.CharScripts;
+using ImportantScripts.CharScripts.Pet;
 using ImportantScripts.Interactables;
 using ImportantScripts.ItemsScripts;
 using ImportantScripts.Managers;
@@ -10,9 +10,8 @@ using ResourcesAndItems;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UselessScripts;
-using Random = UnityEngine.Random;
 
-namespace ImportantScripts
+namespace ImportantScripts.CharScripts
 {
     public class Char : MonoBehaviour
     {
@@ -31,6 +30,14 @@ namespace ImportantScripts
 
         public Inventory Inventory;
         
+        //Skills
+        public int AdditionalDamage;
+        //Skills
+
+        public GameObject DroneNow;
+        public GameObject Drone;
+        
+        
         public int JumpPower;
         public int MaxHp;
         public int HpNow;
@@ -38,7 +45,14 @@ namespace ImportantScripts
         public int TotalAmmoRockets;
         public int Money;
 
-        public bool _inDialogue;
+        public bool IsDronePickedUp;
+        
+        public int Xp;
+        public int LvlOfChar;
+        public int XpReqForNewLvl;
+        public int CurrAmountOfSkillPoints;
+        
+        public bool InDialogue;
         public bool IsInstrumentsPickedUp;
         
         public bool RocketLauncherPickedUp;
@@ -46,7 +60,55 @@ namespace ImportantScripts
         public float LookSpeed = 5f;
         private Vector3 _movement;
 
-       
+        public void StatsUp(string whatStat)
+        {
+            if (CurrAmountOfSkillPoints > 0)
+            {
+                switch (whatStat)
+                {
+                    case "Hp":
+                        MaxHp += 3;
+                        Heal(999);
+                        break;
+                    case "Damage":
+                        AdditionalDamage += 3;
+                        break;
+                    case "Speed":
+                        Speed += 2;
+                        break;
+                }
+
+                CurrAmountOfSkillPoints -= 1;
+            }
+        }
+        
+        public void LvlUp()
+        {
+            LvlOfChar += 1;
+
+            if (LvlOfChar % 3 == 0)
+            {
+                CurrAmountOfSkillPoints += 2;
+            }
+
+            else
+            {
+                CurrAmountOfSkillPoints += 1;
+            }
+        }
+        
+        
+        public void GetXp(int amountOfXp)
+        {
+            Xp += amountOfXp;
+
+            while (Xp >= XpReqForNewLvl)
+            {
+                Xp -= XpReqForNewLvl;
+                XpReqForNewLvl += XpReqForNewLvl * 50 / 100;
+                LvlUp();
+            }
+        }
         
         private void Awake()
         {
@@ -63,13 +125,29 @@ namespace ImportantScripts
         
         private void Update()
         {
-          
-           
-
             var cameramain = GameManager.GameManagerIn.Camera;
-
             
-            if (_inDialogue == false)
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                if (IsDronePickedUp)
+                {
+                    if (DroneNow == null)
+                    {
+                        var drone = Instantiate(Drone);
+                        DroneNow = drone;
+                        
+                        var lookingTransform = cameramain.transform;
+                        RaycastHit hit;
+                        if (Physics.Raycast(lookingTransform.position + lookingTransform.forward * 0.1f,
+                            lookingTransform.forward, out hit, 9999))
+                        {
+                            drone.GetComponent<Drone>().Distanation = hit.point;    
+                        }  
+                    }  
+                }
+            }
+            
+            if (InDialogue == false)
             {
             
             gameObject.transform.rotation =
@@ -114,7 +192,7 @@ namespace ImportantScripts
                 if (Input.GetKeyDown(KeyCode.Mouse0) && CurrentWeapon != null)
                 {
                     var weaponTransform = cameramain.transform;
-                    CurrentWeapon.Fire(weaponTransform.position, weaponTransform.rotation);
+                    CurrentWeapon.Fire(weaponTransform.position, weaponTransform.rotation, AdditionalDamage);
                 }
 
                 if (Input.GetKeyDown(KeyCode.R) && CurrentWeapon != null)
@@ -130,6 +208,7 @@ namespace ImportantScripts
                     }
                 }
 
+                
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     var lookingTransform = cameramain.transform;
@@ -141,11 +220,17 @@ namespace ImportantScripts
                         Debug.Log("Trying to use " + hitObject.name);
                         var provider = hitObject.GetComponent<ItemProvider>();
                         var portal = hitObject.GetComponent<Portal>();
-                        var _npc = hitObject.GetComponent<Dialogue>();
+                        var turret = hitObject.GetComponent<BulletTurret>();
+                        var npc = hitObject.GetComponent<Dialogue>();
 
                         if (portal != null && IsInstrumentsPickedUp)
                         {
                            portal.Fix(); 
+                        }
+
+                        if (turret != null && IsInstrumentsPickedUp)
+                        {
+                            turret.Fix();
                         }
                         
                         if (provider != null)
@@ -202,12 +287,12 @@ namespace ImportantScripts
                             }
                         }
 
-                        if (_npc != null)
+                        if (npc != null)
                         {
                             try
                             {
-                                _npc.OnDialogueStart(gameObject);
-                                _inDialogue = true;
+                                npc.OnDialogueStart(gameObject);
+                                InDialogue = true;
                             }
                             catch (Exception e)
                             {
@@ -245,8 +330,7 @@ namespace ImportantScripts
                        RocketLauncherPickedUp = true;
                        break;
                    case ItemsTypes.PocketWithMoney:
-                       Money += amountOfResource + Random.Range(-amountOfResource / 100 * 20,
-                                    amountOfResource / 100 * 20);
+                       Money += amountOfResource;
                        break;
                    case ItemsTypes.Bullet:
                        TotalAmmoBullets += amountOfResource;
@@ -255,6 +339,11 @@ namespace ImportantScripts
                        TotalAmmoRockets += amountOfResource;
                        break;
                case ItemsTypes.Key:
+                   break;
+               case ItemsTypes.Xp:
+                   break;
+               case ItemsTypes.Drone:
+                   IsDronePickedUp = true;
                    break;
                default:
                        throw new ArgumentOutOfRangeException(); 

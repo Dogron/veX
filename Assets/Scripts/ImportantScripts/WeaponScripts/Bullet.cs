@@ -1,4 +1,6 @@
 ﻿using ImportantScripts.Interactables;
+using ImportantScripts.NPCScripts;
+using ImportantScripts.NPCScripts.EnemiesScripts;
 using UnityEngine;
 
 namespace ImportantScripts.WeaponScripts
@@ -41,7 +43,7 @@ namespace ImportantScripts.WeaponScripts
 
                 else if (enemy != null)
                 {
-                    enemy.StartCoroutineDamage(1);
+                    enemy.StartCoroutineDamage(Damage);
                     Instantiate(TailOfBoom, hit.transform.position, hit.transform.rotation);
                 }
 

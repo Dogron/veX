@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using ImportantScripts.CharScripts;
 using ImportantScripts.NPCScripts;
+using ImportantScripts.NPCScripts.SpecialNPC;
 
 namespace ImportantScripts.ItemsScripts
 {

@@ -125,6 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 300
-  Damage: 20
+  Damage: 4
   Duration: 5
   TailOfBoom: {fileID: 1061887540214388, guid: 210b7c17c13604fc09a602282921649c, type: 2}

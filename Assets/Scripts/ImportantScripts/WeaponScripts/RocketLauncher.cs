@@ -24,7 +24,7 @@ namespace ImportantScripts.WeaponScripts
         }
         
         
-        public void Fire(Vector3 position, Quaternion rotation)
+        public void Fire(Vector3 position, Quaternion rotation, int AdditionalDamage)
         {
             print("SomeThing");
             if (_ammoNow == 0)
@@ -33,6 +33,8 @@ namespace ImportantScripts.WeaponScripts
             _ammoNow--;
             Instantiate(Rocket, position, rotation);
         }
+
+        
 
         public int Reload(int available)
         {
