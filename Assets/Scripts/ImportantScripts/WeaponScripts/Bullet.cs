@@ -19,13 +19,6 @@ namespace ImportantScripts.WeaponScripts
         {
             var deltaTime = Time.deltaTime;
 
-            _timePassed += deltaTime;
-            if (_timePassed > Duration)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, Speed * deltaTime))
             {
@@ -47,7 +40,7 @@ namespace ImportantScripts.WeaponScripts
                     Instantiate(TailOfBoom, hit.transform.position, hit.transform.rotation);
                 }
 
-                Destroy(gameObject);
+                gameObject.SetActive(false);
                 return;
             }
 

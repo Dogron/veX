@@ -1,3 +1,4 @@
+using ImportantScripts.Managers;
 using UnityEngine;
 
 namespace ImportantScripts.WeaponScripts
@@ -29,8 +30,9 @@ namespace ImportantScripts.WeaponScripts
                 return;
 
             _ammoNow--;
-           var bullet = Instantiate(Bullet, position, rotation);
-            bullet.GetComponent<Bullet>().Damage += additionalDamage;
+           //var bullet = Instantiate(Bullet, position, rotation);
+            //bullet.GetComponent<Bullet>().Damage += additionalDamage;
+            ObjectPoolManager.Instance.ChooseListToPool(Bullet,position,rotation);
         }
 
         public int Reload(int available)

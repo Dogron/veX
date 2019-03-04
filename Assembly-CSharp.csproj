@@ -80,7 +80,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\EnemiesManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\InventoryManager.cs" />
-    <Compile Include="Assets\Scripts\ImportantScripts\Managers\Object_Pool_Manager.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\Managers\ObjectPoolManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\BulletTurret.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Dialogue.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\EnemiesScripts\Enemy.cs" />

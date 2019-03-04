@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using ImportantScripts.CharScripts;
 using ImportantScripts.ItemsScripts;
-using ImportantScripts.Managers;
 using ResourcesAndItems;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,13 +18,13 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public EnemyStates EnemyState;
 
-		public SphereCollider SphereCollider;
-		
 		public int Speed;
 		
+		 Coroutine coroutine;
 		public int AttackPower;
 		public int ReloadSpeed;
-
+		public int RadiusOfSee;
+		
 		public List<Item> LootOnEnemy;
 
 		public GameObject LootPocket;
@@ -55,59 +53,75 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
 		{
+			
+			
+			opponent = Char.CharIn.gameObject;
 			EnemyState = enemyState;
 			print("State has changed to" + EnemyState);
 			
+			if (coroutine != null)
+			{
+				StopCoroutine(coroutine);
+			}
+			
 			if (EnemyState == EnemyStates.Idle)
 			{
-				StartCoroutine(IdleStateCoroutine());
+				
+				coroutine = StartCoroutine(IdleStateCoroutine(opponent));
 			}
 
 			if (EnemyState == EnemyStates.Attack)
 			{
+				
 				StartCoroutine(AttackStateCoroutine(opponent));
 			}
 
 			if (EnemyState == EnemyStates.Searching)
 			{
+				
 				StartCoroutine(SearchingStateCoroutine());
 			}
 		}
 
-		public IEnumerator SearchingStateCoroutine()
+		private IEnumerator SearchingStateCoroutine()
 		{
 			print("Searching Coroutine");
-			
-			Vector3 target;
+
 			var timer = 5;
 			while (EnemyState == EnemyStates.Searching)
 			{
 				yield return new WaitForSeconds(1);
-				target = new Vector3(Random.Range(1, Speed), transform.position.y, Random.Range(1, Speed));
+				var target = transform.position + new Vector3(Random.Range(1, Speed), transform.position.y, Random.Range(1, Speed));
 				Agent.SetDestination(target);
 				timer -= 1;
-				if (timer <= 0)
-				{
-					print("Changed to Idle");
-					ChangeStatesFun(EnemyStates.Idle,null);
-				}
+				print(timer);
+				if (timer > 0) continue;
+				
+				print("Changed to Idle");
+				ChangeStatesFun(EnemyStates.Idle,null);
 			}
 		}
-		
-		public IEnumerator IdleStateCoroutine()
+
+		private IEnumerator IdleStateCoroutine(GameObject opponent)
 		{
-			Vector3 target;
-				while (EnemyState == EnemyStates.Idle)
+			while (EnemyState == EnemyStates.Idle)
 				{
 					yield return new WaitForSeconds(3);
-					target = new Vector3(Random.Range(1, Speed), transform.position.y, Random.Range(1, Speed));
+					
+					var target = transform.position + new Vector3(Random.Range(1, Speed), transform.position.y, Random.Range(1, Speed));
+					print(target);
 					Agent.SetDestination(target);
+
+					if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) < RadiusOfSee)
+					{
+						ChangeStatesFun(EnemyStates.Attack,opponent);
+					}
 				}
 		}
 
-		public IEnumerator AttackStateCoroutine(GameObject opponent)
+		private IEnumerator AttackStateCoroutine(GameObject opponent)
 		{
-			print("Attak Coroutine");
+			print("Attack Coroutine");
 			
 			while (EnemyState == EnemyStates.Attack)
 			{
@@ -122,7 +136,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 					}
 				}
 
-				if (Vector3.Distance(opponent.transform.position,transform.position) > GetComponent<BoxCollider>().size.z)
+				if (Vector3.Distance(opponent.transform.position,transform.position) > RadiusOfSee)
 				{
 					ChangeStatesFun(EnemyStates.Searching,null);
 				}
@@ -180,8 +194,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public void StartCoroutineDamage(int amount)
 		{
-		    //StartCoroutine(DamageCoroutine(amount));
-			Hp -= amount;
+			Damage(amount);
 		}
 	}
 }

@@ -25,7 +25,7 @@ namespace ImportantScripts.WeaponScripts
 			_timePassed += deltaTime;
 			if (_timePassed > Duration)
 			{
-				Destroy(gameObject);
+				gameObject.SetActive(false);
 				return;
 			}
 
@@ -50,8 +50,6 @@ namespace ImportantScripts.WeaponScripts
 
 		private void OnTriggerEnter(Collider other)
         {
-			         print("BlaBlaBLa");
-
 	        var enemy = other.gameObject.GetComponent<Enemy>();
 	        
 	        if (enemy == null)
@@ -63,13 +61,6 @@ namespace ImportantScripts.WeaponScripts
 		        }
                    
 	        }
-
-	        else if (enemy != null)
-	        {
-		        enemy.StartCoroutineDamage(1);
-		        Instantiate(TailOfBoom, other.gameObject.transform.position, other.gameObject.transform.rotation);
-	        }
-
 		}
 	}
 	

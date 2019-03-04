@@ -304,7 +304,6 @@ namespace ImportantScripts.CharScripts
                 }
             }
             
-            
             var yRot = Input.GetAxisRaw("Mouse X");
             var rotation = new Vector3(0f, yRot, 0f) * LookSpeed;
             MyRigid.MoveRotation(MyRigid.rotation * Quaternion.Euler(rotation));

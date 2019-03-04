@@ -1,3 +1,4 @@
+using ImportantScripts.Managers;
 using UnityEngine;
 
 namespace ImportantScripts.WeaponScripts
@@ -23,7 +24,6 @@ namespace ImportantScripts.WeaponScripts
             get { return "RocketLauncher"; }
         }
         
-        
         public void Fire(Vector3 position, Quaternion rotation, int AdditionalDamage)
         {
             print("SomeThing");
@@ -31,7 +31,7 @@ namespace ImportantScripts.WeaponScripts
                 return;
 
             _ammoNow--;
-            Instantiate(Rocket, position, rotation);
+            ObjectPoolManager.Instance.ChooseListToPool(Rocket,position,rotation);
         }
 
         

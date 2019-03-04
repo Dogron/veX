@@ -7,7 +7,7 @@ namespace ImportantScripts
 
         public GameObject TargetToFollow;
 
-        private const float CamSens = 180;
+        private float CamSens = 180;
         public float MinVert;
         public float MaxVert;
         private float _rotationX;

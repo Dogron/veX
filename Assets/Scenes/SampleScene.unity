@@ -1495,11 +1495,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 65624933743387130, guid: 7ccbcabfd79464fff9638712d5c46697,
-        type: 2}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ccbcabfd79464fff9638712d5c46697, type: 2}
   m_IsPrefabAsset: 0
@@ -13312,6 +13307,7 @@ GameObject:
   - component: {fileID: 758955538}
   - component: {fileID: 758955537}
   - component: {fileID: 758955539}
+  - component: {fileID: 758955540}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -13413,6 +13409,21 @@ MonoBehaviour:
     ItemType: 4
     IsItNoStaking: 0
     IDofObject: 0
+--- !u!114 &758955540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 758955536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd487c5c064d414f9072e6e3d5ece65b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Bullet: {fileID: 1326337803123924, guid: a1a1b4abd2c0c46e5bfd7007dcb1aeb2, type: 2}
+  BulletList: []
+  Rocket: {fileID: 1879802148875482, guid: 424c7d8c418b54d66b2ee82d8017cae7, type: 2}
+  RocketsList: []
 --- !u!1 &759677312
 GameObject:
   m_ObjectHideFlags: 0
