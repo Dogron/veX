@@ -120,7 +120,6 @@ namespace ImportantScripts.CharScripts
             Cursor.lockState = CursorLockMode.Locked;
             HpNow = MaxHp;
             _speed = Speed;
-
         }
         
         private void Update()
@@ -149,7 +148,6 @@ namespace ImportantScripts.CharScripts
             
             if (InDialogue == false)
             {
-            
             gameObject.transform.rotation =
                 new Quaternion(0.0f, cameramain.transform.rotation.y, 0, cameramain.transform.rotation.w);
 
@@ -189,7 +187,13 @@ namespace ImportantScripts.CharScripts
                     } 
                 }
 
-                if (Input.GetKeyDown(KeyCode.Mouse0) && CurrentWeapon != null)
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    print("Wepaon now is Autorifle");
+                    CurrentWeapon = gameObject.GetComponentInChildren<Autorifle>();
+                }
+                
+                if (Input.GetKey(KeyCode.Mouse0) && CurrentWeapon != null)
                 {
                     var weaponTransform = cameramain.transform;
                     CurrentWeapon.Fire(weaponTransform.position, weaponTransform.rotation, AdditionalDamage);

@@ -1,46 +1,89 @@
 using ImportantScripts.CharScripts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ImportantScripts.Managers
 {
     public class InventoryManager : MonoBehaviour
     {
-
         public static InventoryManager InventoryManagerIn;
 
         public GameObject InventorySpace;
         public GameObject[] InventoryGrid;
-        public GameObject InfoButton;
+
+        public Selectable firstElementToSelect;
+        
         public GameObject InfoText;
-        public GameObject TheGridWhatHaveBeenChosed;
-		
+        public GameObject theGridWhatHaveBeenChosed;
+
+        public GameObject HelpPanelInventory;
+        
+        public CanvasManager canvasManager = CanvasManager.CanvasManagerIn;
+        
         private void Awake()
         {
             InventoryManagerIn = this;
         }
-
-        private void Start()
-        {
-            InventoryOnOff(false);
-        }
-
+       
         public void InventoryOnOff(bool onoff)
         {
             InventorySpace.SetActive(onoff);
             InfoText.GetComponent<Text>().text = "";
+
+            if (InventorySpace.activeInHierarchy)
+            {
+                firstElementToSelect.Select();
+                UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
+                
+            }
         }
 
+        
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.I))
             {
                 var isActive = InventorySpace.activeInHierarchy;
                 InventoryOnOff(!isActive);
-           
-                if (InventorySpace.activeInHierarchy)
+            }
+
+            if (CanvasManager.CanvasManagerIn.inventorySpace.activeInHierarchy)
+            {
+                if (Input.GetKeyDown(KeyCode.C))
                 {
-                    UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
+	                print("Enter has pressed");
+                					
+	                if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
+	                {
+		                print("The Grid has been Chosed");
+		                theGridWhatHaveBeenChosed = EventSystem.current.currentSelectedGameObject;
+		                HelpPanelOnOff(true,theGridWhatHaveBeenChosed.transform);
+	                }
+                }
+               
+               
+                
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+	                print("K has pressed");
+	                InfoText.GetComponent<Text>().text = theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null ? theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.infoAbout : "";
+	                
+                }
+                				
+                if (Input.GetKeyDown(KeyCode.L))
+                {
+	                if (theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null)
+	                {
+		                Char.CharIn.OnUseItem(theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid);
+	                }
+	                HelpPanelOnOff(false,null);
+                }
+                				
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+	                theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.amountOfItem -= 1;
+	                HelpPanelOnOff(false,null);
                 }
             }
         }
@@ -51,7 +94,7 @@ namespace ImportantScripts.Managers
             {
                 if (inventory.ItemsInInventory.Count > i)
                 {
-                    InventoryGrid[i].GetComponent<InventoryGrid>().ItemInThisGrid = inventory.ItemsInInventory[i];
+                    InventoryGrid[i].GetComponent<InventoryGrid>().itemInThisGrid = inventory.ItemsInInventory[i];
                 }
             }
 		
@@ -61,11 +104,16 @@ namespace ImportantScripts.Managers
             }
         }
 
-        public void OnButtonInfoPressed()
+        public void HelpPanelOnOff(bool onOff, Transform Transform)
         {
-            InfoText.GetComponent<Text>().text = TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null ? TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.InfoAbout : "";
-        }
+            HelpPanelInventory.SetActive(onOff);
 
+            if (onOff)
+            {
+                HelpPanelInventory.transform.position =
+                    Transform.position + new Vector3(80, 0, 0);
+            }
+        }
        
     }
 }

@@ -10,33 +10,29 @@ namespace ImportantScripts.Managers
 {
 	public class CanvasManager : MonoBehaviour
 	{
-	    public static CanvasManager CanvasManagerIn;
+		public static CanvasManager CanvasManagerIn;
 
-		public GameObject DialougePanel;
-		
-		public GameObject AmmoText;
-		public GameObject HealthText;
+		public GameObject dialougePanel;
 
-		public Text DialogueTextNode;
-		public Text[] DialogueTextAnswer;
+		public GameObject ammoText;
+		public GameObject healthText;
+		public GameObject moneyText;
 
-		public GameObject InventorySpace;
+		public Text dialogueTextNode;
+		public Text[] dialogueTextAnswer;
+
+		public GameObject inventorySpace;
 		public List<GameObject> InventoryGrid;
-		public GameObject InfoText;
-		public GameObject TheGridWhatHaveBeenChosed;
-		public Selectable FirstElementToFocus;
-		public GameObject HelpPanelInventory;
 
 		public GameObject SkillsPanelSpace;
-		public GameObject TheSkillWhatHaveBeenChosed;
 		public Selectable FirstSkillElementToFocus;
 		public GameObject CurrentAmountOfSkillPoints;
 
-		
-		
 		public GameObject XpText;
-		
-		
+
+		public GameObject lootPanel;
+		public List<GameObject> LootGrid;
+
 		private void Awake()
 		{
 			CanvasManagerIn = this;
@@ -44,24 +40,30 @@ namespace ImportantScripts.Managers
 
 		private void Start()
 		{
-			InventoryOnOff(false);
 			Cursor.visible = false;
 
-			var listofinventorygrid = InventorySpace.GetComponentsInChildren<InventoryGrid>();
+			var listofinventorygrid = inventorySpace.GetComponentsInChildren<InventoryGrid>();
 			foreach (var invgrid in listofinventorygrid)
 			{
 				InventoryGrid.Add(invgrid.gameObject);
 			}
 		}
 
-		public void InventoryOnOff(bool onOff)
+		public void LootPanelOnOff(bool onoff, List<Item> itemsInfPanelOnOff)
 		{
-			InventorySpace.SetActive(onOff);
-			InfoText.GetComponent<Text>().text = "";
+			lootPanel.SetActive(onoff);
 
-			if (onOff)
+			if (false)
 			{
-				FirstElementToFocus.Select();
+				UpdateLootPanel(itemsInfPanelOnOff);
+			}
+		}
+
+		public void UpdateLootPanel(List<Item> items)
+		{
+			for (int i = 0; i < items.Count; i++)
+			{
+				LootGrid[i].GetComponent<InventoryGrid>().itemInThisGrid = items[i];
 			}
 		}
 
@@ -74,117 +76,50 @@ namespace ImportantScripts.Managers
 				FirstSkillElementToFocus.Select();
 			}
 		}
-		
+
 		private void Update()
 		{
 			if (Input.GetKeyDown(KeyCode.P))
 			{
 				SkillsPanelOnOff(!SkillsPanelSpace.activeInHierarchy);
-				InventoryOnOff(false);
 			}
 
-			if (Input.GetKeyDown(KeyCode.I))
-			{
-				var isActive = InventorySpace.activeInHierarchy;
-				InventoryOnOff(!isActive);
-           
-				if (InventorySpace.activeInHierarchy)
-				{
-					UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
-				}
-				
-				SkillsPanelOnOff(false);
-			}
-			
-			
 			if (SkillsPanelSpace.activeInHierarchy)
 			{
 				if (Input.GetKeyDown(KeyCode.C))
 				{
 					if (EventSystem.current.currentSelectedGameObject.GetComponent<SkillsPanelGrid>() != null)
 					{
-						Char.CharIn.StatsUp(EventSystem.current.currentSelectedGameObject.GetComponent<SkillsPanelGrid>().WhatSkillIsThat);
+						Char.CharIn.StatsUp(EventSystem.current.currentSelectedGameObject
+							.GetComponent<SkillsPanelGrid>().WhatSkillIsThat);
 					}
 				}
 
-				CurrentAmountOfSkillPoints.GetComponent<Text>().text = "Amount of skill points : " + Char.CharIn.CurrAmountOfSkillPoints.ToString();
+				CurrentAmountOfSkillPoints.GetComponent<Text>().text =
+					"Amount of skill points : " + Char.CharIn.CurrAmountOfSkillPoints.ToString();
 			}
-			
+
 			var weapon = Char.CharIn.CurrentWeapon;
-			
+
 			if (weapon == null)
 			{
-				AmmoText.GetComponent<Text>().text = "No weapon";
+				ammoText.GetComponent<Text>().text = "No weapon";
 			}
 			else
 			{
-				AmmoText.GetComponent<Text>().text = weapon.Name + " ammo: " + weapon.AmmoNow + " of " + weapon.AmmoMax;
+				ammoText.GetComponent<Text>().text = weapon.Name + " ammo: " + weapon.AmmoNow + " of " + weapon.AmmoMax;
 			}
 
-			HealthText.GetComponent<Text>().text = Char.CharIn.HpNow + "/" + Char.CharIn.MaxHp + "   HP";
+			healthText.GetComponent<Text>().text = Char.CharIn.HpNow + "/" + Char.CharIn.MaxHp + "   HP";
 
 			XpText.GetComponent<Text>().text = Char.CharIn.Xp + "/" + Char.CharIn.XpReqForNewLvl + "   xp";
-			
-			
-			if (InventorySpace.activeInHierarchy)
+
+
+			if (inventorySpace.activeInHierarchy)
 			{
-				if (Input.GetKeyDown(KeyCode.C))
-				{
-					print("Enter has pressed");
-				
-					if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
-					{
-						print("The Grid has been Chosed");
-					
-						TheGridWhatHaveBeenChosed = EventSystem.current.currentSelectedGameObject;
-
-						HelpPanelInventory.SetActive(true);
-						HelpPanelInventory.transform.position =
-							TheGridWhatHaveBeenChosed.transform.position + new Vector3(80, 0, 0);
-
-					}
-				}
-
-				if (Input.GetKeyDown(KeyCode.K))
-				{
-					print("K has pressed");
-					
-					InfoText.GetComponent<Text>().text = TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null ? TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.InfoAbout : "";
-					
-					HelpPanelInventory.SetActive(false);
-				}
-
-				if (Input.GetKeyDown(KeyCode.L))
-				{
-					if (TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid != null)
-					{
-						Char.CharIn.OnUseItem(TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid);
-					}
-					
-					HelpPanelInventory.SetActive(false);
-				}
-
-				if (Input.GetKeyDown(KeyCode.R))
-				{
-					TheGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().ItemInThisGrid.AmountOfItem -= 1;
-					
-					HelpPanelInventory.SetActive(false);
-				}
-			}
-			
-		}
-
-		public void UpdateInventory(Inventory inventory)
-		{
-			for (var i = 0; i < InventoryGrid.Count; i++)
-			{
-			InventoryGrid[i].GetComponent<InventoryGrid>().ItemInThisGrid = inventory.ItemsInInventory.Count > i ? inventory.ItemsInInventory[i] : null;
-			}
-		
-			foreach (var grid in InventoryGrid)
-			{
-				grid.GetComponent<InventoryGrid>().UpdateInfoOfPartOfGrid();
+				moneyText.GetComponent<Text>().text = Char.CharIn.Money + " Money";
 			}
 		}
 	}
-}
+}	
+

@@ -32,20 +32,24 @@ namespace ImportantScripts.Managers
             }
         }
 
-        public void ChooseListToPool(GameObject gameObjectToPool, Vector3 _transform, Quaternion _quaternion)
+        public GameObject ChooseListToPool(GameObject gameObjectToPool, Vector3 _transform, Quaternion _quaternion)
         {
+            GameObject go = null;
+            
             if (gameObjectToPool.Equals(Bullet))
             {
                print("Bullet");
                 
-                PullObject(BulletList, _transform,_quaternion);
+               go = PullObject(BulletList, _transform,_quaternion);
             }
 
             if (gameObjectToPool.Equals(Rocket))
             {
                 print("Rocket");
-                PullObject(RocketsList, _transform,_quaternion);
+               go = PullObject(RocketsList, _transform,_quaternion);
             }
+
+            return go != null ? go : null;
         }
 
         private GameObject PullObject(IEnumerable<GameObject> listToPollFrom, Vector3 _transform, Quaternion _quaternion)

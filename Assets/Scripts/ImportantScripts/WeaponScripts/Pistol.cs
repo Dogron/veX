@@ -5,9 +5,12 @@ namespace ImportantScripts.WeaponScripts
 {
     public sealed class Pistol : MonoBehaviour, IWeapon
     {
-        public GameObject Bullet;
+        public GameObject bullet;
 
         private int _ammoNow = 100;
+
+        public float LastShot { get; private set; }
+        public float rateOfFire;
 
         public int AmmoNow
         {
@@ -29,10 +32,16 @@ namespace ImportantScripts.WeaponScripts
             if (_ammoNow == 0)
                 return;
 
+            if (!(Time.time - LastShot > rateOfFire)) 
+                return;
+
+            LastShot = Time.time;
+            
             _ammoNow--;
-           //var bullet = Instantiate(Bullet, position, rotation);
-            //bullet.GetComponent<Bullet>().Damage += additionalDamage;
-            ObjectPoolManager.Instance.ChooseListToPool(Bullet,position,rotation);
+           
+           var bull = ObjectPoolManager.Instance.ChooseListToPool(bullet,position,rotation);
+          print(bull != null);
+           bull.GetComponent<Bullet>().Damage += additionalDamage;
         }
 
         public int Reload(int available)

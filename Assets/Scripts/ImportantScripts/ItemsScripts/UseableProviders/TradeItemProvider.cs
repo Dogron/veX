@@ -16,10 +16,10 @@ namespace ImportantScripts.ItemsScripts
 
             foreach (var item in ItemsInProvider)
             {
-                if (Char.CharIn.Money - cost > item.MoneyCost)
+                if (Char.CharIn.Money - cost > item.moneyCost)
                 {
                    ItemsToReturn.Add(item);
-                    cost += item.MoneyCost;
+                    cost += item.moneyCost;
                 }
 
                 else

@@ -7,36 +7,37 @@ namespace ImportantScripts
 {
     public class InventoryGrid : MonoBehaviour
     {
-        public Item ItemInThisGrid;
+        public Item itemInThisGrid;
      
         public void OnButtonPressed()
         {
-            InventoryManager.InventoryManagerIn.TheGridWhatHaveBeenChosed = gameObject;
+            InventoryManager.InventoryManagerIn.theGridWhatHaveBeenChosed = gameObject;
         }
 
         public void ChooseThisGrid()
         {
-            CanvasManager.CanvasManagerIn.TheGridWhatHaveBeenChosed = gameObject;
+            InventoryManager.InventoryManagerIn.theGridWhatHaveBeenChosed = gameObject;
         }
         
         private void Update()
         {
-            if (ItemInThisGrid != null)
+            if (itemInThisGrid != null)
             {
-                if (ItemInThisGrid.AmountOfItem <= 0)
+                if (itemInThisGrid.amountOfItem <= 0)
                 {
-                    ItemInThisGrid = null;
+                    itemInThisGrid = null;
+                    UpdateInfoOfPartOfGrid();
                 }
+                
+                UpdateInfoOfPartOfGrid();
             }      
-        
-            UpdateInfoOfPartOfGrid();
         }
 
         public void UpdateInfoOfPartOfGrid()
         {
-            if (ItemInThisGrid != null)
+            if (itemInThisGrid != null)
             {
-                GetComponentInChildren<Text>().text = ItemInThisGrid.AmountOfItem + "   " + ItemInThisGrid.Name;
+                GetComponentInChildren<Text>().text = itemInThisGrid.amountOfItem + "   " + itemInThisGrid.Name;
             }
 
             else

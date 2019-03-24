@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ImportantScripts.Saves;
+using UnityEngine;
 
 namespace ImportantScripts.Managers
 {
@@ -20,9 +21,6 @@ namespace ImportantScripts.Managers
 		{
 			Char.transform.position = Spawn.transform.position + new Vector3(0,1,0);
 		}
-
-		void Update () {
 		
-		}
 	}
 }

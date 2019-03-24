@@ -10,26 +10,27 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 {
 	public class Enemy : MonoBehaviour
 	{
-		public NavMeshAgent Agent;
+		public NavMeshAgent agent;
 
-		public int Hp;
+		public int hp;
 
 		private bool _canAttack = true;
 
+		// ReSharper disable once InconsistentNaming
 		public EnemyStates EnemyState;
+		
+		public int speed;
+		
+		private Coroutine _coroutine;
+		public int attackPower;
+		public int reloadSpeed;
+		public int radiusOfSee;
+		
+		public List<Item> lootOnEnemy;
 
-		public int Speed;
+		public GameObject lootPocket;
 		
-		 Coroutine coroutine;
-		public int AttackPower;
-		public int ReloadSpeed;
-		public int RadiusOfSee;
-		
-		public List<Item> LootOnEnemy;
-
-		public GameObject LootPocket;
-		
-		public int HowManyLootOnEnemy;
+		public int howManyLootOnEnemy;
 
 		private void Start()
 		{
@@ -38,36 +39,34 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public void ChooseHowManyLootOnEnemy()
 		{
-			HowManyLootOnEnemy = Random.Range(1, 4);
+			howManyLootOnEnemy = Random.Range(1, 4);
 		}
 
-		public void Damage(int damage)
+		private void Damage(int damage)
 		{
-			Hp -= damage;
+			hp -= damage;
 
-			if (Hp > 0) return;
+			if (hp > 0) return;
 			
 			DropLoot();
 			Destroy(gameObject);
 		}
 
-		public void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
+		private void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
 		{
-			
-			
 			opponent = Char.CharIn.gameObject;
 			EnemyState = enemyState;
 			print("State has changed to" + EnemyState);
 			
-			if (coroutine != null)
+			if (_coroutine != null)
 			{
-				StopCoroutine(coroutine);
+				StopCoroutine(_coroutine);
 			}
 			
 			if (EnemyState == EnemyStates.Idle)
 			{
 				
-				coroutine = StartCoroutine(IdleStateCoroutine(opponent));
+				_coroutine = StartCoroutine(IdleStateCoroutine(opponent));
 			}
 
 			if (EnemyState == EnemyStates.Attack)
@@ -91,8 +90,9 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			while (EnemyState == EnemyStates.Searching)
 			{
 				yield return new WaitForSeconds(1);
-				var target = transform.position + new Vector3(Random.Range(1, Speed), transform.position.y, Random.Range(1, Speed));
-				Agent.SetDestination(target);
+				var position = transform.position;
+				var target = position + new Vector3(Random.Range(1, speed), position.y, Random.Range(1, speed));
+				agent.SetDestination(target);
 				timer -= 1;
 				print(timer);
 				if (timer > 0) continue;
@@ -107,12 +107,13 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			while (EnemyState == EnemyStates.Idle)
 				{
 					yield return new WaitForSeconds(3);
-					
-					var target = transform.position + new Vector3(Random.Range(1, Speed), transform.position.y, Random.Range(1, Speed));
-					print(target);
-					Agent.SetDestination(target);
 
-					if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) < RadiusOfSee)
+					var position = transform.position;
+					var target = position + new Vector3(Random.Range(1, speed), position.y, Random.Range(1, speed));
+					print(target);
+					agent.SetDestination(target);
+
+					if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) < radiusOfSee)
 					{
 						ChangeStatesFun(EnemyStates.Attack,opponent);
 					}
@@ -125,7 +126,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			
 			while (EnemyState == EnemyStates.Attack)
 			{
-				Agent.SetDestination(opponent.transform.position);
+				agent.SetDestination(opponent.transform.position);
 				
 				if (Vector3.Distance(opponent.transform.position,transform.position) < 0.5f)
 				{
@@ -136,7 +137,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 					}
 				}
 
-				if (Vector3.Distance(opponent.transform.position,transform.position) > RadiusOfSee)
+				if (Vector3.Distance(opponent.transform.position,transform.position) > radiusOfSee)
 				{
 					ChangeStatesFun(EnemyStates.Searching,null);
 				}
@@ -147,27 +148,24 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public void SetLootOnEnemy(List<Item> items)
 		{
-			for (int i = 0; i < HowManyLootOnEnemy; i++)
+			for (int i = 0; i < howManyLootOnEnemy; i++)
 			{
-				LootOnEnemy.Add(items[Random.Range(0,items.Count)]);
+				lootOnEnemy.Add(items[Random.Range(0,items.Count)]);
 			}
-			
-			LootOnEnemy.Add(new Item(null,1,"",Random.Range(3,5),false, 0, ItemsTypes.Xp,10000001,true));
+
+			lootOnEnemy.Add(new Item(null, 1, "", Random.Range(3, 5), false, 0, ItemsTypes.Xp, true,"Xp"));
 		}
 		
 		public void DropLoot()
 		{
-			var lootPocket = Instantiate(LootPocket);
-			lootPocket.transform.position = gameObject.transform.position;
-			RaycastHit hit;
-			Physics.Raycast(lootPocket.transform.position, -lootPocket.transform.up, out hit);
-			lootPocket.transform.position = hit.transform.position;
+			// ReSharper disable once InconsistentNaming
+			var _lootPocket = Instantiate(lootPocket,gameObject.transform.position,gameObject.transform.rotation);
 			
-			var lootInLootPocket = lootPocket.GetComponent<ExpandableItemProvider>();
+			var lootInLootPocket = _lootPocket.GetComponent<ExpandableItemProvider>();
 			
-			foreach (var loot in LootOnEnemy)
+			foreach (var loot in lootOnEnemy)
 			{
-				lootInLootPocket.ItemsInProvider.Add(new Item(loot.ItemGameObject,loot.AmountOfItem,loot.InfoAbout,loot.AmountOfResource,loot.IsUseble,loot.MoneyCost,loot.ItemType,loot.IDofObject,loot.IsItNoStaking));
+				lootInLootPocket.ItemsInProvider.Add(new Item(loot.itemGameObject,loot.amountOfItem,loot.infoAbout,loot.amountOfResource,loot.isUseble,loot.moneyCost,loot.ItemType,loot.IsItNoStaking,loot.Name));
 			}
 		}
 
@@ -182,13 +180,15 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		private IEnumerator Attack(GameObject other)
 		{
-			if (other.GetComponent<Char>() != null)
+			var charComp = other.GetComponent<Char>();
+			
+			if (charComp != null)
 			{
 				_canAttack = false;
-				other.GetComponent<Char>().HpNow -= AttackPower;
+				charComp.HpNow -= attackPower;
 			}
 			
-			yield return new WaitForSeconds(ReloadSpeed);
+			yield return new WaitForSeconds(reloadSpeed);
 			_canAttack = true;
 		}
 

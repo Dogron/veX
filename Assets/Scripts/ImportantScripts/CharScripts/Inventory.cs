@@ -15,8 +15,14 @@ namespace ImportantScripts.CharScripts
         {
             if (item.ItemType == ItemsTypes.Xp)
             {
-              gameObject.GetComponent<Char>().GetXp(item.AmountOfResource);
+              gameObject.GetComponent<Char>().GetXp(item.amountOfResource);
               return;
+            }
+
+            if (item.ItemType == ItemsTypes.PocketWithMoney)
+            {
+                gameObject.GetComponent<Char>().Money += item.amountOfResource * item.amountOfItem;
+                return;
             }
             
             if (item.IsItNoStaking == false)
@@ -25,25 +31,15 @@ namespace ImportantScripts.CharScripts
                 {
                     if (itemInInventory.IsItNoStaking == false)
                     {
-                        if (itemInInventory.IDofObject != item.IDofObject) continue;
-                        if (item.ItemType == ItemsTypes.PocketWithMoney)
-                        {
-                            itemInInventory.AmountOfResource += item.AmountOfResource * item.AmountOfItem;
-                            return;
-                        }
+                        if (itemInInventory.Name != item.Name) continue;
                 
-                        itemInInventory.AmountOfItem += item.AmountOfItem;
+                        itemInInventory.amountOfItem += item.amountOfItem;
                         return; 
                     }
                 }
             }
-
-            if (item.ItemType == ItemsTypes.PocketWithMoney)
-            {
-                ItemsInInventory.Add(new Item(item.ItemGameObject,1,item.InfoAbout,item.AmountOfItem * item.AmountOfResource,item.IsUseble,item.MoneyCost,item.ItemType,item.IDofObject,item.IsItNoStaking)); 
-            }
             
-            ItemsInInventory.Add(new Item(item.ItemGameObject,item.AmountOfItem,item.InfoAbout,item.AmountOfResource,item.IsUseble,item.MoneyCost,item.ItemType,item.IDofObject,item.IsItNoStaking));
+            ItemsInInventory.Add(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
         }
 
         public void RemoveFromInventory(Item item)
@@ -57,7 +53,7 @@ namespace ImportantScripts.CharScripts
        
             foreach (var item in ItemsInInventory)
             {
-                if (item.AmountOfItem == 0)
+                if (item.amountOfItem == 0)
                 {
                     MatchedItems.Add(item); 
                 }

@@ -4,55 +4,52 @@ using UnityEngine;
 namespace ImportantScripts.ItemsScripts
 {
     [System.Serializable]
-    public class Item 
+    public class Item
     {
-        public string Name
-        {
-            get { return ItemGameObject.name; }
-        }
-
-        public GameObject ItemGameObject;
+        public string Name;
+       
+        public GameObject itemGameObject;
    
-        public int AmountOfItem;
-        public string InfoAbout;
+        public int amountOfItem;
+        public string infoAbout;
 
-        public int AmountOfResource;
+        public int amountOfResource;
 
-        public bool IsUseble;
+        public bool isUseble;
 
-        public int MoneyCost;
+        public int moneyCost;
         
         public ItemsTypes ItemType;
 
         public bool IsItNoStaking;
 
-        public int IDofObject;
         
+
         public int OnUse()
         {
-            if (!IsUseble) return 0;
+            if (!isUseble) return 0;
             Remove();
 
-            return AmountOfResource;
+            return amountOfResource;
         }
 
         private void Remove()
         {
-            AmountOfItem -= 1;
+            amountOfItem -= 1;
         }
 
         public Item(GameObject itemGameObject, int amountOfItem, string infoAbout, int amountOfResource, 
-            bool isUseble, int moneyCost, ItemsTypes itemType, int idDofObject, bool isItNoStaking)
+            bool isUseble, int moneyCost, ItemsTypes itemType, bool isItNoStaking,string name)
         {
-            ItemGameObject = itemGameObject;
-            AmountOfItem = amountOfItem;
-            InfoAbout = infoAbout;
-            AmountOfResource = amountOfResource;
-            IsUseble = isUseble;
-            MoneyCost = moneyCost;
+            this.itemGameObject = itemGameObject;
+            this.amountOfItem = amountOfItem;
+            this.infoAbout = infoAbout;
+            this.amountOfResource = amountOfResource;
+            this.isUseble = isUseble;
+            this.moneyCost = moneyCost;
             ItemType = itemType;
-            IDofObject = idDofObject;
             IsItNoStaking = isItNoStaking;
+            Name = name;
 
         }
     }

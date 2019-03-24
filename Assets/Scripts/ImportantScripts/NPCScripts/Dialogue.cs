@@ -25,20 +25,20 @@ namespace ImportantScripts.NPCScripts
 		{
 			WhoIsTalking = whoistalking;
 			ShowDialogue = true;
-			CanvasManager.CanvasManagerIn.DialougePanel.SetActive(true);
+			CanvasManager.CanvasManagerIn.dialougePanel.SetActive(true);
 		}
 		
 
 		public void OnDialougeEnd()
 		{
-			CanvasManager.CanvasManagerIn.DialogueTextNode.text = "";
-		    foreach (var t in CanvasManager.CanvasManagerIn.DialogueTextAnswer)
+			CanvasManager.CanvasManagerIn.dialogueTextNode.text = "";
+		    foreach (var t in CanvasManager.CanvasManagerIn.dialogueTextAnswer)
 			{
 				t.text = "";
 			}
 			ShowDialogue = false;
 			WhoIsTalking.GetComponent<Char>().InDialogue = false;
-			CanvasManager.CanvasManagerIn.DialougePanel.SetActive(false);
+			CanvasManager.CanvasManagerIn.dialougePanel.SetActive(false);
 		}
 		public virtual void OnQuestComplete()
 		{
@@ -50,18 +50,18 @@ namespace ImportantScripts.NPCScripts
 		{
 			currentNode= Node[CurrentNode];
 
-			CanvasManager.CanvasManagerIn.DialogueTextNode.text = currentNode.NpcText;
+			CanvasManager.CanvasManagerIn.dialogueTextNode.text = currentNode.NpcText;
 
 			int i;
 
 			for (i = 0; i < AnswersToShow.Count; i++)
 			{
-				CanvasManager.CanvasManagerIn.DialogueTextAnswer[i].text = AnswersToShow[i].Text;
+				CanvasManager.CanvasManagerIn.dialogueTextAnswer[i].text = AnswersToShow[i].Text;
 			}
 
-			for (; i < CanvasManager.CanvasManagerIn.DialogueTextAnswer.Length; i++)
+			for (; i < CanvasManager.CanvasManagerIn.dialogueTextAnswer.Length; i++)
 			{
-				CanvasManager.CanvasManagerIn.DialogueTextAnswer[i].text = "";
+				CanvasManager.CanvasManagerIn.dialogueTextAnswer[i].text = "";
 			}
 		}
 
@@ -141,8 +141,8 @@ namespace ImportantScripts.NPCScripts
 			{
 				foreach (var item in inventory.ItemsInInventory)
 				{
-					if (item.ItemGameObject != reqItem.ItemGameObject) continue;
-					if (item.AmountOfItem < reqItem.AmountOfItem) continue;
+					if (item.itemGameObject != reqItem.itemGameObject) continue;
+					if (item.amountOfItem < reqItem.amountOfItem) continue;
  
 					matchItems.Add(item);
 					break;
@@ -158,9 +158,9 @@ namespace ImportantScripts.NPCScripts
 				{
 					foreach (var matchItem in matchItems)
 					{
-						if (matchItem.ItemGameObject == reqItem.ItemGameObject)
+						if (matchItem.itemGameObject == reqItem.itemGameObject)
 						{
-							matchItem.AmountOfItem -= reqItem.AmountOfItem;
+							matchItem.amountOfItem -= reqItem.amountOfItem;
 						}
 					}
 				}

@@ -343,7 +343,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1006335457087006}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 52.638096, y: 0.930372, z: -14.383582}
+  m_LocalPosition: {x: 25.293772, y: 0.930372, z: -37.573544}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4263302896703606}
@@ -883,8 +883,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9415016, y: 1.2425079, z: 0.466228}
-  m_Center: {x: 0.011091232, y: 0.37874603, z: 0.058893442}
+  m_Size: {x: 1.3356056, y: 1.2425079, z: 1.3986168}
+  m_Center: {x: 0.005214691, y: 0.37874603, z: 0.069452286}
 --- !u!65 &65097724831040918
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -967,8 +967,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.2088269, z: 0.4496913}
-  m_Center: {x: 0, y: -0.14558655, z: 0.023311138}
+  m_Size: {x: 0.5618706, y: 1.2313591, z: 0.4496913}
+  m_Center: {x: -0.0033035278, y: 0.36567956, z: 0.023311138}
 --- !u!65 &65679899912966054
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1040,16 +1040,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8094faf62b4749bbad251c9402cf4589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Agent: {fileID: 195180103491615552}
-  Hp: 10
+  agent: {fileID: 195180103491615552}
+  hp: 8
   EnemyState: 0
-  Speed: 5
-  AttackPower: 1
-  ReloadSpeed: 3
-  RadiusOfSee: 8
-  LootOnEnemy: []
-  LootPocket: {fileID: 1023797059796234, guid: 64f89ee0626fb48529105b8bdc2905c2, type: 2}
-  HowManyLootOnEnemy: 0
+  speed: 5
+  attackPower: 1
+  reloadSpeed: 3
+  radiusOfSee: 8
+  lootOnEnemy: []
+  lootPocket: {fileID: 1023797059796234, guid: 64f89ee0626fb48529105b8bdc2905c2, type: 2}
+  howManyLootOnEnemy: 0
 --- !u!195 &195180103491615552
 NavMeshAgent:
   m_ObjectHideFlags: 1

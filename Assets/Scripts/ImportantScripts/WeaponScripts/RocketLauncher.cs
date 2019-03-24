@@ -9,6 +9,9 @@ namespace ImportantScripts.WeaponScripts
 
         private int _ammoNow = 10;
 
+        public float LastShot { get; private set; }
+        public float RateOfFire;
+
         public int AmmoNow
         {
             get { return _ammoNow; }
@@ -24,14 +27,20 @@ namespace ImportantScripts.WeaponScripts
             get { return "RocketLauncher"; }
         }
         
-        public void Fire(Vector3 position, Quaternion rotation, int AdditionalDamage)
+        public void Fire(Vector3 position, Quaternion rotation, int additionalDamage)
         {
             print("SomeThing");
             if (_ammoNow == 0)
                 return;
 
+            if (!(Time.time - LastShot > RateOfFire)) 
+                return;
+
+            LastShot = Time.time;
             _ammoNow--;
-            ObjectPoolManager.Instance.ChooseListToPool(Rocket,position,rotation);
+           
+            var bull = ObjectPoolManager.Instance.ChooseListToPool(Rocket,position,rotation);
+            bull.GetComponent<Bullet>().Damage += additionalDamage;
         }
 
         

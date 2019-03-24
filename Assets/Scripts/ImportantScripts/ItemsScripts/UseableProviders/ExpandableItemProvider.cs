@@ -9,7 +9,6 @@ namespace ResourcesAndItems
         public override List<Item> Consume()
         {
             return ItemsInProvider;
-           
         }
 
         private void Update()
