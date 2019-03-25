@@ -141,7 +141,7 @@ namespace ImportantScripts.NPCScripts
 			{
 				foreach (var item in inventory.ItemsInInventory)
 				{
-					if (item.itemGameObject != reqItem.itemGameObject) continue;
+					if (item.Name != reqItem.Name) continue;
 					if (item.amountOfItem < reqItem.amountOfItem) continue;
  
 					matchItems.Add(item);
@@ -158,7 +158,7 @@ namespace ImportantScripts.NPCScripts
 				{
 					foreach (var matchItem in matchItems)
 					{
-						if (matchItem.itemGameObject == reqItem.itemGameObject)
+						if (matchItem.Name == reqItem.Name)
 						{
 							matchItem.amountOfItem -= reqItem.amountOfItem;
 						}

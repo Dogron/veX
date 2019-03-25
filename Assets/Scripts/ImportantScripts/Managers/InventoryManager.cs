@@ -28,6 +28,7 @@ namespace ImportantScripts.Managers
        
         public void InventoryOnOff(bool onoff)
         {
+            CanvasManager.CanvasManagerIn.CloseEverything();
             InventorySpace.SetActive(onoff);
             InfoText.GetComponent<Text>().text = "";
 
@@ -35,7 +36,6 @@ namespace ImportantScripts.Managers
             {
                 firstElementToSelect.Select();
                 UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
-                
             }
         }
 
@@ -68,7 +68,6 @@ namespace ImportantScripts.Managers
                 {
 	                print("K has pressed");
 	                InfoText.GetComponent<Text>().text = theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null ? theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.infoAbout : "";
-	                
                 }
                 				
                 if (Input.GetKeyDown(KeyCode.L))

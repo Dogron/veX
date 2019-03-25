@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ImportantScripts.CharScripts.Pet;
 using ImportantScripts.Interactables;
@@ -7,6 +8,7 @@ using ImportantScripts.Managers;
 using ImportantScripts.NPCScripts;
 using ImportantScripts.WeaponScripts;
 using ResourcesAndItems;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UselessScripts;
@@ -226,7 +228,14 @@ namespace ImportantScripts.CharScripts
                         var portal = hitObject.GetComponent<Portal>();
                         var turret = hitObject.GetComponent<BulletTurret>();
                         var npc = hitObject.GetComponent<Dialogue>();
+                        var trader = hitObject.GetComponent<TradeTerminal>();
 
+                        if (trader != null)
+                        {
+                            trader.StartTrade(gameObject);
+                        }
+                            
+                        
                         if (portal != null && IsInstrumentsPickedUp)
                         {
                            portal.Fix(); 
@@ -243,54 +252,10 @@ namespace ImportantScripts.CharScripts
 
                             if (items != null)
                             {
-                                    foreach (var item in items)
-                                    {
-                                        if (Inventory.SizeOfInventory > Inventory.ItemsInInventory.Count)
-                                        {
-                                            print("Added to inventory???");
-                                            Inventory.AddToInventory(item);
-                                            AddedItems.Add(item);
-                                        }
-
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-
-                                    foreach (var t in AddedItems)
-                                    {
-                                        if (provider.gameObject.GetComponent<ExpandableItemProvider>())
-                                        {
-                                            provider.ItemsInProvider.Remove(t);
-                                        }  
-                                    }
-				
-                                    AddedItems.Clear();
+                               CanvasManager.CanvasManagerIn.LootPanelOnOff(true,provider);   
                             }
                         }
-                         var resourceProvider = hitObject.GetComponent<ResourceProvider>();
-    
-                        if (resourceProvider != null)
-                        {
-                            var resource = resourceProvider.Consume();
-
-                            if (resource != null)
-                            {
-                                // ReSharper disable once SwitchStatementMissingSomeCases
-                                switch (resource.Type)
-                                {
-                                    case ResourceType.Bush:
-                                        var bushWithBerries = hitObject.GetComponent<BushWithBerries>();
-                                        Heal(bushWithBerries.Collect());
-                                        print("SomeThing");
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
-                            }
-                        }
-
+                         
                         if (npc != null)
                         {
                             try
@@ -318,6 +283,39 @@ namespace ImportantScripts.CharScripts
             }
         }
 
+        public void AddToInventoryChar(ItemProvider provider,Item itemWhatWeNeed)
+        {
+            var items = provider.Consume();
+            
+            foreach (var item in items)
+            {
+                if (item == itemWhatWeNeed)
+                {
+                    if (Inventory.SizeOfInventory > Inventory.ItemsInInventory.Count)
+                    {
+                        print("Added to inventory???");
+                        Inventory.AddToInventory(item);
+                        AddedItems.Add(item);
+                    }
+                        
+                    else
+                    {
+                        break;
+                    }
+                }  
+            }
+
+            foreach (var t in AddedItems)
+            {
+                if (provider.gameObject.GetComponent<ExpandableItemProvider>())
+                {
+                    provider.ItemsInProvider.Remove(t);
+                }  
+            }
+				
+            AddedItems.Clear();
+        }
+        
        public void OnUseItem(Item item)
        {
            var amountOfResource = item.OnUse();
@@ -332,9 +330,6 @@ namespace ImportantScripts.CharScripts
                    case ItemsTypes.RocketLauncher:
                        RocketLauncherPickedUp = true;
                        break;
-                   case ItemsTypes.PocketWithMoney:
-                       Money += amountOfResource;
-                       break;
                    case ItemsTypes.Bullet:
                        TotalAmmoBullets += amountOfResource;
                        break;
@@ -343,14 +338,24 @@ namespace ImportantScripts.CharScripts
                        break;
                case ItemsTypes.Key:
                    break;
-               case ItemsTypes.Xp:
-                   break;
                case ItemsTypes.Drone:
                    IsDronePickedUp = true;
                    break;
-               default:
+               case ItemsTypes.Junk:
+                   break;
+               case ItemsTypes.SparklingDrink:
+                   StartCoroutine(SpeedBustTime(3, 3));
+                   break;
+                   default:
                        throw new ArgumentOutOfRangeException(); 
            }
+       }
+
+       private IEnumerator SpeedBustTime(int SpeedBust,int Time)
+       {
+           Speed += SpeedBust;
+           yield return new WaitForSeconds(Time);
+           Speed -= SpeedBust;
        }
         
         private void OnCollisionStay()

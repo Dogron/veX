@@ -11,5 +11,7 @@ namespace ImportantScripts.ItemsScripts
         Rocket,
         Xp,
         Drone,
+        SparklingDrink,
+        Junk,
     }
 }

@@ -32,7 +32,10 @@ namespace ImportantScripts.Managers
 
 		public GameObject lootPanel;
 		public List<GameObject> LootGrid;
-
+		public Selectable FirstLootGridToFocus;
+		public InventoryGrid GridWhatHaveBeenChosed;
+		public Text InfoLootText;
+		public ItemProvider CurrentProvider;
 		private void Awake()
 		{
 			CanvasManagerIn = this;
@@ -49,26 +52,42 @@ namespace ImportantScripts.Managers
 			}
 		}
 
-		public void LootPanelOnOff(bool onoff, List<Item> itemsInfPanelOnOff)
+		public void LootPanelOnOff(bool onoff, ItemProvider provider)
 		{
+			CloseEverything();
+			
 			lootPanel.SetActive(onoff);
 
-			if (false)
+			if (onoff)
 			{
-				UpdateLootPanel(itemsInfPanelOnOff);
+				CurrentProvider = provider;
+				FirstLootGridToFocus.Select();
+				UpdateLootPanel(provider);
+			}
+
+			else
+			{
+				CurrentProvider = null;
 			}
 		}
 
-		public void UpdateLootPanel(List<Item> items)
+		private void UpdateLootPanel(ItemProvider items)
 		{
-			for (int i = 0; i < items.Count; i++)
+			foreach (var grid in LootGrid)
 			{
-				LootGrid[i].GetComponent<InventoryGrid>().itemInThisGrid = items[i];
+				grid.gameObject.GetComponentInChildren<Text>().text = "";
+				grid.GetComponent<InventoryGrid>().itemInThisGrid = null;
+			}
+			
+			for (int i = 0; i < items.Consume().Count; i++)
+			{
+				LootGrid[i].GetComponent<InventoryGrid>().itemInThisGrid = items.Consume()[i];
 			}
 		}
 
-		public void SkillsPanelOnOff(bool onOff)
+		private void SkillsPanelOnOff(bool onOff)
 		{
+			CloseEverything();
 			SkillsPanelSpace.SetActive(onOff);
 
 			if (onOff)
@@ -77,13 +96,59 @@ namespace ImportantScripts.Managers
 			}
 		}
 
+		public void CloseEverything()
+		{
+			lootPanel.SetActive(false);
+			SkillsPanelSpace.SetActive(false);
+			inventorySpace.SetActive(false);
+			TradeManager.TradeManagerIn.TradePanel.SetActive(false);
+		}
+		
+		
 		private void Update()
 		{
+			if (Input.GetKeyDown(KeyCode.Q))
+			{
+				CloseEverything();
+			}
+			
+			
 			if (Input.GetKeyDown(KeyCode.P))
 			{
 				SkillsPanelOnOff(!SkillsPanelSpace.activeInHierarchy);
 			}
 
+			if (lootPanel.activeInHierarchy)
+			{
+				if (Input.GetKeyDown(KeyCode.C))
+				{
+					if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
+					{
+						GridWhatHaveBeenChosed =
+							EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>();
+						UpdateLootPanel(CurrentProvider);
+					}
+				}
+
+				if (Input.GetKeyDown(KeyCode.K))
+				{
+					  InfoLootText.GetComponent<Text>().text = GridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null ? GridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.infoAbout : "";
+					  UpdateLootPanel(CurrentProvider);
+				}
+
+				if (Input.GetKeyDown(KeyCode.L))
+				{
+					Char.CharIn.AddToInventoryChar(CurrentProvider,EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>().itemInThisGrid);
+					
+					UpdateLootPanel(CurrentProvider);
+				}
+
+				if (CurrentProvider.ItemsInProvider.Count == 0)
+				{
+					LootPanelOnOff(false,null);
+				}
+			}
+			
 			if (SkillsPanelSpace.activeInHierarchy)
 			{
 				if (Input.GetKeyDown(KeyCode.C))

@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Managers\ObjectPoolManager.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\Managers\TradeManager.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\BulletTurret.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Dialogue.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\EnemiesScripts\Enemy.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\JamesNpc.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\TraderRobotCharacterNpc.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\TraderRobotNpc.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\TradeTerminal.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\ObservableProperty.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\Saves\PlayerSaves.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\SkillsPanelGrid.cs" />

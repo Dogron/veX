@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ImportantScripts.CharScripts;
 using ImportantScripts.ItemsScripts;
+using ImportantScripts.Managers;
 using ResourcesAndItems;
 using UnityEngine;
 using UnityEngine.AI;
@@ -27,7 +28,10 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 		public int radiusOfSee;
 		
 		public List<Item> lootOnEnemy;
+		public int MoneyOnEnemy;
+		public int XpOnEnemy;
 
+		
 		public GameObject lootPocket;
 		
 		public int howManyLootOnEnemy;
@@ -35,6 +39,13 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 		private void Start()
 		{
 			ChangeStatesFun(EnemyStates.Idle,null);
+			MoneyOnEnemy = MoneyOnEnemy + Random.Range(-30, 30);
+			if (MoneyOnEnemy < 0)
+			{
+				MoneyOnEnemy = 0;
+			}
+			
+			XpOnEnemy = XpOnEnemy + Random.Range(0, 3);
 		}
 
 		public void ChooseHowManyLootOnEnemy()
@@ -152,13 +163,10 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			{
 				lootOnEnemy.Add(items[Random.Range(0,items.Count)]);
 			}
-
-			lootOnEnemy.Add(new Item(null, 1, "", Random.Range(3, 5), false, 0, ItemsTypes.Xp, true,"Xp"));
 		}
 		
 		public void DropLoot()
 		{
-			// ReSharper disable once InconsistentNaming
 			var _lootPocket = Instantiate(lootPocket,gameObject.transform.position,gameObject.transform.rotation);
 			
 			var lootInLootPocket = _lootPocket.GetComponent<ExpandableItemProvider>();
@@ -167,6 +175,10 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			{
 				lootInLootPocket.ItemsInProvider.Add(new Item(loot.itemGameObject,loot.amountOfItem,loot.infoAbout,loot.amountOfResource,loot.isUseble,loot.moneyCost,loot.ItemType,loot.IsItNoStaking,loot.Name));
 			}
+
+			Char.CharIn.GetXp(XpOnEnemy);
+			Char.CharIn.Money += MoneyOnEnemy;
+
 		}
 
 		private void OnTriggerEnter(Collider other)
