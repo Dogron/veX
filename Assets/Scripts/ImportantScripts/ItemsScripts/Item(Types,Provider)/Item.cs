@@ -11,6 +11,7 @@ namespace ImportantScripts.ItemsScripts
         public GameObject itemGameObject;
    
         public int amountOfItem;
+        
         public string infoAbout;
 
         public int amountOfResource;
@@ -50,6 +51,20 @@ namespace ImportantScripts.ItemsScripts
             ItemType = itemType;
             IsItNoStaking = isItNoStaking;
             Name = name;
+        }
+
+        public Item(Item item)
+        {
+            Name = item.Name;
+            itemGameObject = item.itemGameObject;
+            amountOfItem = item.amountOfItem;
+            infoAbout = item.infoAbout;
+            amountOfResource = item.amountOfResource;
+            isUseble = item.isUseble;
+            moneyCost = item.moneyCost;
+            ItemType = item.ItemType;
+            IsItNoStaking = item.IsItNoStaking;
+            Name = item.Name;
         }
     }
 }

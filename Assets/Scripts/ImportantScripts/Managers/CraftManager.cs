@@ -51,7 +51,7 @@ namespace ImportantScripts.Managers
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             var trytocraft = true;
             
@@ -79,7 +79,7 @@ namespace ImportantScripts.Managers
             {
                 if (firstItem.Name == recipe.FirstItem.Name)
                 {
-                    if (firstItem.amountOfItem > recipe.FirstItem.amountOfItem)
+                    if (firstItem.amountOfItem >= recipe.FirstItem.amountOfItem)
                     {
                         if (secondItem.Name == recipe.SecondItem.Name)
                         {
@@ -108,6 +108,16 @@ namespace ImportantScripts.Managers
                 }
             }
 
+            for (var i = 0; i < 2; i++)
+            {
+                Char.CharIn.Inventory.AddToInventory(new Item(craftGrid[i].itemInThisGrid));
+            }
+
+            foreach (var grid in craftGrid)
+            {
+                grid.itemInThisGrid.amountOfItem = 0;
+            }
+            
             return false;
         }
 

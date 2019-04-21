@@ -1,4 +1,5 @@
 using ImportantScripts.CharScripts;
+using ImportantScripts.ItemsScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -42,7 +43,6 @@ namespace ImportantScripts.Managers
         
         private void Update()
         {
-            
             if (Input.GetKeyDown(KeyCode.I))
             {
                 var isActive = inventorySpace.activeInHierarchy;
@@ -71,7 +71,8 @@ namespace ImportantScripts.Managers
                     {
                         if (craftGrid.itemInThisGrid == null)
                         {
-                            craftGrid.itemInThisGrid = theGridWhatHaveBeenChoosed.itemInThisGrid;
+                            craftGrid.itemInThisGrid = new Item(theGridWhatHaveBeenChoosed.itemInThisGrid);
+                            theGridWhatHaveBeenChoosed.itemInThisGrid.amountOfItem = 0;
                             break;
                         }
                     }
