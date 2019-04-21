@@ -29,13 +29,6 @@ namespace ImportantScripts.ItemsScripts
             }
 
             Char.CharIn.Money -= cost;
-           
-            if (GetComponentInParent<TraderRobotNpc>())
-            {
-                var traderRobotNpc = GetComponentInParent<TraderRobotNpc>();
-                traderRobotNpc.OnBuySomeThing();
-            }
-            
             return ItemsToReturn;
            
         }

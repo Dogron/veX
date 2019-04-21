@@ -8,7 +8,7 @@ namespace ImportantScripts
     public class InventoryGrid : MonoBehaviour
     {
         public Item itemInThisGrid;
-     
+     /*
         public void OnButtonPressed()
         {
             InventoryManager.InventoryManagerIn.theGridWhatHaveBeenChosed = gameObject;
@@ -18,7 +18,7 @@ namespace ImportantScripts
         {
             InventoryManager.InventoryManagerIn.theGridWhatHaveBeenChosed = gameObject;
         }
-        
+     */   
         private void Update()
         {
             if (itemInThisGrid != null)

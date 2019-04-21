@@ -5,7 +5,7 @@ namespace ImportantScripts.WeaponScripts
 {
     public class Autorifle : MonoBehaviour, IWeapon
     {
-        private int _ammoNow;
+        private int _ammoNow = 500;
         
         public GameObject Bullet;
 
@@ -46,14 +46,14 @@ namespace ImportantScripts.WeaponScripts
         public int Reload(int available)
         {
             var missing = AmmoMax - AmmoNow;
+           
             if (available <= missing)
             {
                 _ammoNow += available;
                 return available;
             }
-
-            _ammoNow += missing;
-            return missing;
+                _ammoNow += missing;
+                return missing;
         }
     }
 }

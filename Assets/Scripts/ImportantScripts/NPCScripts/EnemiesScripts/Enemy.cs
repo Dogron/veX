@@ -38,7 +38,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		private void Start()
 		{
-			ChangeStatesFun(EnemyStates.Idle,null);
+		    ChangeStatesFun(EnemyStates.Idle,null);
 			MoneyOnEnemy = MoneyOnEnemy + Random.Range(-30, 30);
 			if (MoneyOnEnemy < 0)
 			{
@@ -73,27 +73,22 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			{
 				StopCoroutine(_coroutine);
 			}
-			
-			if (EnemyState == EnemyStates.Idle)
-			{
-				
-				_coroutine = StartCoroutine(IdleStateCoroutine(opponent));
-			}
 
-			if (EnemyState == EnemyStates.Attack)
+			switch (enemyState)
 			{
-				
-				StartCoroutine(AttackStateCoroutine(opponent));
-			}
-
-			if (EnemyState == EnemyStates.Searching)
-			{
-				
-				StartCoroutine(SearchingStateCoroutine());
+				case EnemyStates.Idle:
+					StartCoroutine(IdleStateCoroutine(opponent));
+					break;
+				case EnemyStates.Attack:
+					StartCoroutine(AttackStateCoroutine(opponent));
+				    break;
+				case EnemyStates.Searching:
+					StartCoroutine(SearchingStateCoroutine(opponent));
+				    break;
 			}
 		}
 
-		private IEnumerator SearchingStateCoroutine()
+		private IEnumerator SearchingStateCoroutine(GameObject opponent)
 		{
 			print("Searching Coroutine");
 
@@ -105,11 +100,16 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 				var target = position + new Vector3(Random.Range(1, speed), position.y, Random.Range(1, speed));
 				agent.SetDestination(target);
 				timer -= 1;
-				print(timer);
-				if (timer > 0) continue;
-				
-				print("Changed to Idle");
-				ChangeStatesFun(EnemyStates.Idle,null);
+				if (timer <= 0)
+				{
+					print("Changed to Idle");
+					ChangeStatesFun(EnemyStates.Idle, null);
+				}
+
+				if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) < radiusOfSee)
+				{
+					ChangeStatesFun(EnemyStates.Attack,opponent);
+				}
 			}
 		}
 
@@ -121,7 +121,6 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 					var position = transform.position;
 					var target = position + new Vector3(Random.Range(1, speed), position.y, Random.Range(1, speed));
-					print(target);
 					agent.SetDestination(target);
 
 					if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) < radiusOfSee)
@@ -139,7 +138,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			{
 				agent.SetDestination(opponent.transform.position);
 				
-				if (Vector3.Distance(opponent.transform.position,transform.position) < 0.5f)
+				if (Vector3.Distance(opponent.transform.position,gameObject.transform.position) < 0.5f)
 				{
 					if (_canAttack)
 					{
@@ -167,6 +166,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 		
 		public void DropLoot()
 		{
+			// ReSharper disable once InconsistentNaming
 			var _lootPocket = Instantiate(lootPocket,gameObject.transform.position,gameObject.transform.rotation);
 			
 			var lootInLootPocket = _lootPocket.GetComponent<ExpandableItemProvider>();
@@ -181,25 +181,17 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		}
 
-		private void OnTriggerEnter(Collider other)
-		{
-			if (other.gameObject.GetComponent<Char>() != null)
-			{
-				print("Trigger enter Attack");
-				ChangeStatesFun(EnemyStates.Attack,other.gameObject);
-			}
-		}
-
 		private IEnumerator Attack(GameObject other)
 		{
 			var charComp = other.GetComponent<Char>();
+			print(charComp != null);
 			
 			if (charComp != null)
 			{
 				_canAttack = false;
-				charComp.HpNow -= attackPower;
+				charComp.HpNow = charComp.HpNow - attackPower;
 			}
-			
+
 			yield return new WaitForSeconds(reloadSpeed);
 			_canAttack = true;
 		}

@@ -50,7 +50,6 @@ namespace ImportantScripts.ItemsScripts
             ItemType = itemType;
             IsItNoStaking = isItNoStaking;
             Name = name;
-
         }
     }
 }

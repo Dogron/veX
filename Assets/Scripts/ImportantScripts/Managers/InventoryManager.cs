@@ -9,30 +9,30 @@ namespace ImportantScripts.Managers
     {
         public static InventoryManager InventoryManagerIn;
 
-        public GameObject InventorySpace;
-        public GameObject[] InventoryGrid;
+        public GameObject inventorySpace;
+        public InventoryGrid[] inventoryGrid;
 
         public Selectable firstElementToSelect;
         
-        public GameObject InfoText;
-        public GameObject theGridWhatHaveBeenChosed;
-
-        public GameObject HelpPanelInventory;
+        public GameObject infoText;
+        public InventoryGrid theGridWhatHaveBeenChoosed;
         
-        public CanvasManager canvasManager = CanvasManager.CanvasManagerIn;
+        
+        public GameObject helpPanelInventory;
         
         private void Awake()
         {
             InventoryManagerIn = this;
         }
        
-        public void InventoryOnOff(bool onoff)
+        public void InventoryOnOff(bool onOff)
         {
+            theGridWhatHaveBeenChoosed = null;
             CanvasManager.CanvasManagerIn.CloseEverything();
-            InventorySpace.SetActive(onoff);
-            InfoText.GetComponent<Text>().text = "";
+            inventorySpace.SetActive(onOff);
+            infoText.GetComponent<Text>().text = "";
 
-            if (InventorySpace.activeInHierarchy)
+            if (inventorySpace.activeInHierarchy)
             {
                 firstElementToSelect.Select();
                 UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
@@ -42,14 +42,17 @@ namespace ImportantScripts.Managers
         
         private void Update()
         {
+            
             if (Input.GetKeyDown(KeyCode.I))
             {
-                var isActive = InventorySpace.activeInHierarchy;
+                var isActive = inventorySpace.activeInHierarchy;
                 InventoryOnOff(!isActive);
             }
 
             if (CanvasManager.CanvasManagerIn.inventorySpace.activeInHierarchy)
             {
+                UpdateInventory(GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>());
+                
                 if (Input.GetKeyDown(KeyCode.C))
                 {
 	                print("Enter has pressed");
@@ -57,60 +60,77 @@ namespace ImportantScripts.Managers
 	                if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
 	                {
 		                print("The Grid has been Chosed");
-		                theGridWhatHaveBeenChosed = EventSystem.current.currentSelectedGameObject;
-		                HelpPanelOnOff(true,theGridWhatHaveBeenChosed.transform);
+		                theGridWhatHaveBeenChoosed = EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>();
+		                HelpPanelOnOff(true,theGridWhatHaveBeenChoosed.transform);
 	                }
                 }
-               
-               
-                
+
                 if (Input.GetKeyDown(KeyCode.K))
                 {
-	                print("K has pressed");
-	                InfoText.GetComponent<Text>().text = theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null ? theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.infoAbout : "";
+                    foreach (var craftGrid in  CraftManager.CraftManagerIn.craftGrid)
+                    {
+                        if (craftGrid.itemInThisGrid == null)
+                        {
+                            craftGrid.itemInThisGrid = theGridWhatHaveBeenChoosed.itemInThisGrid;
+                            break;
+                        }
+                    }
                 }
-                				
+                 
+                if (Input.GetKeyDown(KeyCode.J))
+                {
+	                print("K has pressed");
+	                infoText.GetComponent<Text>().text = theGridWhatHaveBeenChoosed.itemInThisGrid != null ? theGridWhatHaveBeenChoosed.itemInThisGrid.infoAbout : "";
+                }
+
                 if (Input.GetKeyDown(KeyCode.L))
                 {
-	                if (theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null)
+	                if (theGridWhatHaveBeenChoosed.GetComponent<InventoryGrid>().itemInThisGrid != null)
 	                {
-		                Char.CharIn.OnUseItem(theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid);
+		                Char.CharIn.OnUseItem(theGridWhatHaveBeenChoosed.itemInThisGrid);
 	                }
 	                HelpPanelOnOff(false,null);
                 }
                 				
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-	                theGridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.amountOfItem -= 1;
-	                HelpPanelOnOff(false,null);
+                    if (theGridWhatHaveBeenChoosed.itemInThisGrid != null)
+                        theGridWhatHaveBeenChoosed.itemInThisGrid.amountOfItem -= 1;
+                    HelpPanelOnOff(false,null);
                 }
             }
         }
 
         public void UpdateInventory(Inventory inventory)
         {
-            for (var i = 0; i < InventoryGrid.Length; i++)
+            foreach (var grid in inventoryGrid)
+            {
+                grid.itemInThisGrid = null;
+            }
+            
+            for (var i = 0; i < inventoryGrid.Length; i++)
             {
                 if (inventory.ItemsInInventory.Count > i)
                 {
-                    InventoryGrid[i].GetComponent<InventoryGrid>().itemInThisGrid = inventory.ItemsInInventory[i];
+                    inventoryGrid[i].itemInThisGrid = inventory.ItemsInInventory[i];
                 }
             }
 		
-            foreach (var grid in InventoryGrid)
+            foreach (var grid in inventoryGrid)
             {
-                grid.GetComponent<InventoryGrid>().UpdateInfoOfPartOfGrid();
+                grid.UpdateInfoOfPartOfGrid();
             }
         }
 
-        public void HelpPanelOnOff(bool onOff, Transform Transform)
+        // ReSharper disable once InconsistentNaming
+        public void HelpPanelOnOff(bool onOff, Transform _Transform)
         {
-            HelpPanelInventory.SetActive(onOff);
+            helpPanelInventory.SetActive(onOff);
 
             if (onOff)
             {
-                HelpPanelInventory.transform.position =
-                    Transform.position + new Vector3(80, 0, 0);
+                helpPanelInventory.transform.position =
+                    _Transform.position + new Vector3(80, 0, 0);
             }
         }
        

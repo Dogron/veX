@@ -12,13 +12,18 @@ namespace ImportantScripts.NPCScripts
     {
         public List<Item> WhoIsTradingItems;
         public List<Item> TraderItems;
-        public GameObject InventoryTradePanel;
-        public List<InventoryGrid> InventoryGridsTradePanel;
-        public GameObject TraderTradePanel;
-        public List<InventoryGrid> TraderGridsTradePanel;
-
+       
         public GameObject WhoIsTrading;
-        
+
+        public TradeManager TraderItemsMan;
+
+        public GameObject GridWhatHaveBeenChosed;
+        private void Start()
+        {
+            TraderItemsMan = TradeManager.TradeManagerIn;
+        }
+
+
         public void StartTrade(GameObject whoistrading)
         {
             TradeManager.TradeManagerIn.TraderPanelOnOff(true);
@@ -27,17 +32,15 @@ namespace ImportantScripts.NPCScripts
             UpdateTradePanel();
         }
 
-       
-        
         public void UpdateTradePanel()
         {
-            foreach (var grid in TraderGridsTradePanel)
+            foreach (var grid in TraderItemsMan.TraderGridsTradePanel)
             {
                     grid.gameObject.GetComponentInChildren<Text>().text = "";
                     grid.GetComponent<InventoryGrid>().itemInThisGrid = null;
             }
             
-            foreach (var grid in InventoryGridsTradePanel)
+            foreach (var grid in TraderItemsMan.InventoryGridsTradePanel)
             {
                 grid.gameObject.GetComponentInChildren<Text>().text = "";
                 grid.GetComponent<InventoryGrid>().itemInThisGrid = null;
@@ -45,12 +48,12 @@ namespace ImportantScripts.NPCScripts
 
             for (int i = 0; i < WhoIsTradingItems.Count; i++)
             {
-                InventoryGridsTradePanel[i].itemInThisGrid = WhoIsTradingItems[i];
+                TraderItemsMan.InventoryGridsTradePanel[i].itemInThisGrid = WhoIsTradingItems[i];
             }
 
             for (int i = 0; i < TraderItems.Count; i++)
             {
-                TraderGridsTradePanel[i].itemInThisGrid = TraderItems[i];     
+                TraderItemsMan.TraderGridsTradePanel[i].itemInThisGrid = TraderItems[i];     
             }
         }
 
@@ -65,32 +68,55 @@ namespace ImportantScripts.NPCScripts
             {
                 if (Input.GetKeyDown(KeyCode.C))
                 {
-                    if (EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>() != null)
-                    {
-                        var item = EventSystem.current.currentSelectedGameObject.GetComponent<InventoryGrid>()
-                            .itemInThisGrid;
-                        var Char = WhoIsTrading.gameObject.GetComponent<Char>();
-                        var inventory = WhoIsTrading.gameObject.GetComponent<Inventory>();
-                        if (EventSystem.current.currentSelectedGameObject.GetComponentInParent<GridLayoutGroup>().gameObject.name == InventoryTradePanel.name)
-                        {
-                            Char.Money += item.moneyCost;
-                            TraderItems.Add(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
-                            inventory.RemoveFromInventory(item);
-                        }
+                    GridWhatHaveBeenChosed = EventSystem.current.currentSelectedGameObject;
+                    
+                    TraderItemsMan.HelpPanelOnOff(true,GridWhatHaveBeenChosed.transform.position + new Vector3(20,0,0));
+                }
 
-                        if (EventSystem.current.currentSelectedGameObject.GetComponentInParent<GridLayoutGroup>().gameObject.name == TraderTradePanel.name)
+                if (TraderItemsMan.HelpPanel.activeInHierarchy)
+                {
+                    if (Input.GetKeyDown(KeyCode.L))
+                    {
+                        if (GridWhatHaveBeenChosed.GetComponent<InventoryGrid>() != null)
                         {
-                            if (Char.Money >= item.moneyCost)
+                            TraderItemsMan.HelpPanelOnOff(false,new Vector3(0,0,0));
+                            
+                            var item = GridWhatHaveBeenChosed.GetComponent<InventoryGrid>()
+                                .itemInThisGrid;
+                            var Char = WhoIsTrading.gameObject.GetComponent<Char>();
+                            var inventory = WhoIsTrading.gameObject.GetComponent<Inventory>();
+                            
+                            if (GridWhatHaveBeenChosed.GetComponentInParent<GridLayoutGroup>().gameObject.name == TraderItemsMan.InventoryTradePanel.name)
                             {
-                                Char.Money -= item.moneyCost;
-                                inventory.AddToInventory(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
-                                TraderItems.Remove(item);
+                                Char.Money += item.moneyCost;
+                                TraderItems.Add(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
+                                inventory.RemoveFromInventory(item);
                             }
+
+                            if (GridWhatHaveBeenChosed.GetComponentInParent<GridLayoutGroup>().gameObject.name == TraderItemsMan.TraderTradePanel.name)
+                            {
+                                if (Char.Money >= item.moneyCost)
+                                {
+                                    Char.Money -= item.moneyCost;
+                                    inventory.AddToInventory(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
+                                    TraderItems.Remove(item);
+                                }
+                            } 
                         }
                     }
-               
-                    UpdateTradePanel();
+                    
+                    if (GridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid != null)
+                    {
+                        TraderItemsMan.MoneyText.GetComponent<Text>().text = GridWhatHaveBeenChosed.GetComponent<InventoryGrid>().itemInThisGrid.moneyCost.ToString();
+                    }
+
+                    else
+                    {
+                        TraderItemsMan.MoneyText.GetComponent<Text>().text = "";
+                    }
                 }
+                
+                UpdateTradePanel(); 
             }
         }
     }

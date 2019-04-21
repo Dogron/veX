@@ -5,6 +5,7 @@ namespace ImportantScripts.ItemsScripts
         Heal,
         Quest,
         RocketLauncher,
+        AutoRifle,
         Key,
         PocketWithMoney,
         Bullet,

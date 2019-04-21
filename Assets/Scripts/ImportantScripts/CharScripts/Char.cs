@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using ImportantScripts.CharScripts.Pet;
-using ImportantScripts.Interactables;
 using ImportantScripts.ItemsScripts;
 using ImportantScripts.Managers;
 using ImportantScripts.NPCScripts;
 using ImportantScripts.WeaponScripts;
 using ResourcesAndItems;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UselessScripts;
@@ -27,9 +26,11 @@ namespace ImportantScripts.CharScripts
 
         public Rigidbody MyRigid;
 
+        public CinemachineVirtualCamera MainVCamera;
+        
         public float Speed;
         private float _speed;
-
+        
         public Inventory Inventory;
         
         //Skills
@@ -58,6 +59,7 @@ namespace ImportantScripts.CharScripts
         public bool IsInstrumentsPickedUp;
         
         public bool RocketLauncherPickedUp;
+        public bool AutoRiflePickedUp;
         
         public float LookSpeed = 5f;
         private Vector3 _movement;
@@ -136,34 +138,34 @@ namespace ImportantScripts.CharScripts
                     {
                         var drone = Instantiate(Drone);
                         DroneNow = drone;
+
+                        var maincamera = Camera.main;
                         
-                        var lookingTransform = cameramain.transform;
-                        RaycastHit hit;
-                        if (Physics.Raycast(lookingTransform.position + lookingTransform.forward * 0.1f,
-                            lookingTransform.forward, out hit, 9999))
+                        if (maincamera != null)
                         {
-                            drone.GetComponent<Drone>().Distanation = hit.point;    
-                        }  
+                            var lookingTransform = maincamera.transform;
+                            RaycastHit hit;
+                            if (Physics.Raycast(lookingTransform.position * 0.1f,
+                                lookingTransform.forward, out hit, 9999))
+                            {
+                                drone.GetComponent<Drone>().Distanation = hit.point;    
+                            }
+                        }
                     }  
                 }
             }
             
-            if (InDialogue == false)
+            if (InDialogue == false && !CanvasManager.CanvasManagerIn.lootPanel.activeInHierarchy)
             {
-            gameObject.transform.rotation =
+           
+                Move();
+                
+                gameObject.transform.rotation =
                 new Quaternion(0.0f, cameramain.transform.rotation.y, 0, cameramain.transform.rotation.w);
 
             HeadNeckChar.transform.rotation = cameramain.transform.rotation;
 
-                if (Input.GetKey(KeyCode.A))
-                    MyRigid.AddForce(_speed * -transform.right, ForceMode.Acceleration);
-                if (Input.GetKey(KeyCode.D))
-                    MyRigid.AddForce(_speed * transform.right, ForceMode.Acceleration);
-                if (Input.GetKey(KeyCode.W))
-                    MyRigid.AddForce(_speed * transform.forward, ForceMode.Acceleration);    
-                if (Input.GetKey(KeyCode.S))
-                    MyRigid.AddForce(_speed * -transform.forward, ForceMode.Acceleration);
-                
+        
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 _speed = Speed * 1.5f;
@@ -191,8 +193,12 @@ namespace ImportantScripts.CharScripts
 
                 if (Input.GetKeyDown(KeyCode.Alpha3))
                 {
-                    print("Wepaon now is Autorifle");
-                    CurrentWeapon = gameObject.GetComponentInChildren<Autorifle>();
+                    if (AutoRiflePickedUp)
+                    {
+                        print("Weapon now is AutoRifle");
+                        CurrentWeapon = gameObject.GetComponentInChildren<Autorifle>();
+                    }
+                   
                 }
                 
                 if (Input.GetKey(KeyCode.Mouse0) && CurrentWeapon != null)
@@ -211,6 +217,11 @@ namespace ImportantScripts.CharScripts
                     if (CurrentWeapon.Name.Contains("RocketLauncher"))
                     {
                        TotalAmmoRockets -= CurrentWeapon.Reload(TotalAmmoRockets);
+                    }
+
+                    if (CurrentWeapon.Name.Contains("Autorifle"))
+                    {
+                        TotalAmmoBullets -= CurrentWeapon.Reload(TotalAmmoBullets);
                     }
                 }
 
@@ -233,8 +244,9 @@ namespace ImportantScripts.CharScripts
                         if (trader != null)
                         {
                             trader.StartTrade(gameObject);
+                            MainVCamera.LookAt = hit.transform;
+                            MainVCamera.Priority = 2;
                         }
-                            
                         
                         if (portal != null && IsInstrumentsPickedUp)
                         {
@@ -253,6 +265,8 @@ namespace ImportantScripts.CharScripts
                             if (items != null)
                             {
                                CanvasManager.CanvasManagerIn.LootPanelOnOff(true,provider);   
+                               MainVCamera.LookAt = hit.transform;
+                               MainVCamera.Priority = 2;
                             }
                         }
                          
@@ -262,7 +276,10 @@ namespace ImportantScripts.CharScripts
                             {
                                 npc.OnDialogueStart(gameObject);
                                 InDialogue = true;
+                                MainVCamera.LookAt = hit.transform;
+                                MainVCamera.Priority = 2;
                             }
+                           
                             catch (Exception e)
                             {
                                 Console.WriteLine(e);
@@ -283,6 +300,30 @@ namespace ImportantScripts.CharScripts
             }
         }
 
+        public void Move()
+        {
+            if (Input.GetKey(KeyCode.A))
+                MyRigid.AddForce(_speed * -transform.right, ForceMode.Acceleration);
+            if (Input.GetKey(KeyCode.D))
+                MyRigid.AddForce(_speed * transform.right, ForceMode.Acceleration);
+            if (Input.GetKey(KeyCode.W))
+                MyRigid.AddForce(_speed * transform.forward, ForceMode.Acceleration);    
+            if (Input.GetKey(KeyCode.S))
+                MyRigid.AddForce(_speed * -transform.forward, ForceMode.Acceleration);
+
+            if (MainVCamera.LookAt != null)
+            {
+                MainVCamera.Priority = 0;
+            }
+        }
+
+        public void SetOffAllWeaponsBesidesCurrent()
+        {
+            GetComponentInChildren<Autorifle>().gameObject.SetActive(false);
+            GetComponentInChildren<Pistol>().gameObject.SetActive(false);
+            GetComponentInChildren<RocketLauncher>().gameObject.SetActive(false);
+        }
+        
         public void AddToInventoryChar(ItemProvider provider,Item itemWhatWeNeed)
         {
             var items = provider.Consume();
@@ -336,7 +377,10 @@ namespace ImportantScripts.CharScripts
                    case ItemsTypes.Rocket:
                        TotalAmmoRockets += amountOfResource;
                        break;
-               case ItemsTypes.Key:
+                   case ItemsTypes.AutoRifle:
+                       AutoRiflePickedUp = true;
+                       break;
+                   case ItemsTypes.Key:
                    break;
                case ItemsTypes.Drone:
                    IsDronePickedUp = true;
