@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ImportantScripts.CharScripts;
 using ImportantScripts.ItemsScripts;
 using UnityEngine;
@@ -7,30 +8,30 @@ namespace ImportantScripts.Managers
 {
     public class Recipe
     {
-        public Item FirstItem;
-        public Item SecondItem;
+        public List<Item> ItemsNeedToCraft;
         public Item ResultItem;
 
-        public Recipe(Item firstItem, Item secondItem, Item resultItem)
+        public Recipe(List<Item> itemsNeedToCraft, Item resultItem)
         {
-            FirstItem = firstItem;
-            SecondItem = secondItem;
+            ItemsNeedToCraft = itemsNeedToCraft;
             ResultItem = resultItem;
         }
     }
 
     public static class AllRecipes
     {
-        public static Recipe AmmoBulletPack = new Recipe(
-            new Item(null,2,null,1,false,0,ItemsTypes.Junk,false,"GunPowder"),
-            new Item(null,1,null,1,false,0,ItemsTypes.Junk,false,"Junk"),
-            new Item(null,1,"Pack with the some amount of bullets",15,true,7,ItemsTypes.Bullet,false,"AmmoBulletPack"));
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable FieldCanBeMadeReadOnly.Global
+        public static Recipe AmmoBulletPack = new Recipe
+            (
+                 new List<Item>{new Item(null,2,null,1,false,0,ItemsTypes.Junk,false,"GunPowder"),new Item(null,1,null,1,false,0,ItemsTypes.Junk,false,"Junk")}, 
+                 new Item(null,1,"Pack with the some amount of bullets",15,true,7,ItemsTypes.Bullet,false,"BulletPack")
+            );
 
         public static List<Recipe> Recipes = new List<Recipe>
         {
             AmmoBulletPack
         };
-        
     }
     
     public class CraftManager : MonoBehaviour
@@ -39,7 +40,7 @@ namespace ImportantScripts.Managers
         
         public static CraftManager CraftManagerIn;
 
-        public InventoryGrid[] craftGrid;
+        public List<InventoryGrid> craftGrid;
 
         public Recipe whatRecipeWasUsed;
         private void Awake()
@@ -53,29 +54,41 @@ namespace ImportantScripts.Managers
 
         private void FixedUpdate()
         {
-            var trytocraft = true;
-            
-            foreach (var craftgrid in craftGrid)
-            {
-                if (craftgrid.itemInThisGrid == null)
-                {
-                    trytocraft = false;
-                    break;
-                }
-            }
+            var trytocraft = craftGrid.All(craftgrid => craftgrid.itemInThisGrid != null);
 
             if (trytocraft)
             {
-                if (TryToCraft(craftGrid[0].itemInThisGrid,craftGrid[1].itemInThisGrid))
+                if (TryToCraft())
                 {
-                   Craft(craftGrid[0].itemInThisGrid,craftGrid[1].itemInThisGrid);
+                   Craft();
                 }
             }
         }
 
-        private bool TryToCraft(Item firstItem, Item secondItem)
+        private bool TryToCraft()
         {
             foreach (var recipe in AllRecipes.Recipes)
+            {
+                var i = 0;
+                foreach (var item in recipe.ItemsNeedToCraft)
+                {
+                    var count = 0;
+                    foreach (var grid in craftGrid)
+                    {
+                        if (grid.itemInThisGrid.Name == item.Name && grid.itemInThisGrid.amountOfItem >= item.amountOfItem) count++;
+                    }
+                                          
+                    i += count;
+                }
+
+                if (i == recipe.ItemsNeedToCraft.Count)
+                {
+                    whatRecipeWasUsed = recipe;
+                    return true;
+                }
+            }
+            
+            /*foreach (var recipe in AllRecipes.Recipes)
             {
                 if (firstItem.Name == recipe.FirstItem.Name)
                 {
@@ -107,6 +120,7 @@ namespace ImportantScripts.Managers
                     }
                 }
             }
+            */
 
             for (var i = 0; i < 2; i++)
             {
@@ -121,11 +135,52 @@ namespace ImportantScripts.Managers
             return false;
         }
 
-        public void Craft(Item firstItem, Item secondItem)
+        public void Craft()
         {
             Char.CharIn.Inventory.AddToInventory(whatRecipeWasUsed.ResultItem);
+
+            foreach (var grid in craftGrid)
+            {
+                if (grid.itemInThisGrid.Name == whatRecipeWasUsed.ItemsNeedToCraft[0].Name)
+                {
+                    grid.itemInThisGrid.amountOfItem -= whatRecipeWasUsed.ItemsNeedToCraft[0].amountOfItem;
+                }
+
+                else
+                {
+                    grid.itemInThisGrid.amountOfItem -= whatRecipeWasUsed.ItemsNeedToCraft[1].amountOfItem;
+                }
+            }
             
-            foreach (var grid in InventoryManager.InventoryManagerIn.inventoryGrid)
+            for (var i = 0; i < 2; i++)
+            {
+                Char.CharIn.Inventory.AddToInventory(new Item(craftGrid[i].itemInThisGrid));
+            }
+
+            foreach (var grid in craftGrid)
+            {
+                grid.itemInThisGrid.amountOfItem = 0;
+            }
+            
+           /* foreach (var invgrid in InventoryManager.InventoryManagerIn.inventoryGrid)
+            {
+                foreach (var craftgrid in craftGrid)
+                {
+                    if (craftgrid.itemInThisGrid == invgrid.itemInThisGrid)
+                    {
+                        foreach (var itemneedtocraft in whatRecipeWasUsed.ItemsNeedToCraft)
+                        {
+                            if (itemneedtocraft.Name == craftgrid.itemInThisGrid.Name)
+                            {
+                                invgrid.itemInThisGrid.amountOfItem -= itemneedtocraft.amountOfItem;
+                            }
+                        }
+                    }
+                }
+            }
+            */
+            
+            /* foreach (var grid in InventoryManager.InventoryManagerIn.inventoryGrid)
             {
                 if (grid.itemInThisGrid == firstItem)
                 {
@@ -152,12 +207,7 @@ namespace ImportantScripts.Managers
                     grid.itemInThisGrid.amountOfItem -= whatRecipeWasUsed.SecondItem.amountOfItem;
                 }
             }
-
-            foreach (var craftgrid in craftGrid)
-            {
-                craftgrid.itemInThisGrid = null;
-            }
-            
+**/
         }
     }
 }

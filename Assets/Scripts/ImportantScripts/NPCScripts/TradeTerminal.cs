@@ -89,8 +89,9 @@ namespace ImportantScripts.NPCScripts
                             if (GridWhatHaveBeenChosed.GetComponentInParent<GridLayoutGroup>().gameObject.name == TraderItemsMan.InventoryTradePanel.name)
                             {
                                 Char.Money += item.moneyCost;
-                                TraderItems.Add(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
-                                inventory.RemoveFromInventory(item);
+                                TraderItems.Add(new Item(item.itemGameObject,1,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
+                                var found = inventory.ItemsInInventory.Find(it => it.Name == item.Name);
+                                found.amountOfItem -= 1;
                             }
 
                             if (GridWhatHaveBeenChosed.GetComponentInParent<GridLayoutGroup>().gameObject.name == TraderItemsMan.TraderTradePanel.name)
@@ -98,8 +99,9 @@ namespace ImportantScripts.NPCScripts
                                 if (Char.Money >= item.moneyCost)
                                 {
                                     Char.Money -= item.moneyCost;
-                                    inventory.AddToInventory(new Item(item.itemGameObject,item.amountOfItem,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
-                                    TraderItems.Remove(item);
+                                    inventory.AddToInventory(new Item(item.itemGameObject,1,item.infoAbout,item.amountOfResource,item.isUseble,item.moneyCost,item.ItemType,item.IsItNoStaking,item.Name));
+                                    var found = TraderItems.Find(it => it.Name == item.Name);
+                                    found.amountOfItem -= 1;
                                 }
                             } 
                         }

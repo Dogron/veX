@@ -4,7 +4,8 @@ using UnityEngine;
 namespace ImportantScripts.ItemsScripts
 {
     [System.Serializable]
-    public class Item
+
+public class Item
     {
         public string Name;
        

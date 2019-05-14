@@ -6,6 +6,8 @@ namespace ResourcesAndItems
 {
     public class ExpandableItemProvider : ItemProvider
     {
+        public string Name;
+        
         public override List<Item> Consume()
         {
             return ItemsInProvider;

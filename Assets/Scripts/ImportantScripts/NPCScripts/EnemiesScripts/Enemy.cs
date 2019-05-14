@@ -67,7 +67,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 		{
 			opponent = Char.CharIn.gameObject;
 			EnemyState = enemyState;
-			print("State has changed to" + EnemyState);
+			//print("State has changed to" + EnemyState);
 			
 			if (_coroutine != null)
 			{
@@ -80,6 +80,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 					StartCoroutine(IdleStateCoroutine(opponent));
 					break;
 				case EnemyStates.Attack:
+					print("Attack");
 					StartCoroutine(AttackStateCoroutine(opponent));
 				    break;
 				case EnemyStates.Searching:
@@ -138,8 +139,10 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			{
 				agent.SetDestination(opponent.transform.position);
 				
-				if (Vector3.Distance(opponent.transform.position,gameObject.transform.position) < 0.5f)
+				if (Vector3.Distance(opponent.transform.position,gameObject.transform.position) < 3f)
 				{
+					print("distance");
+					
 					if (_canAttack)
 					{
 						print("Attack?");
@@ -189,6 +192,8 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			if (charComp != null)
 			{
 				_canAttack = false;
+				print(other);
+				print("Attack");
 				charComp.HpNow = charComp.HpNow - attackPower;
 			}
 

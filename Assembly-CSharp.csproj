@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\UselessScripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\UselessScripts\CameraManager.cs" />
     <Compile Include="Assets\Scripts\UselessScripts\Interactable.cs" />
+    <Compile Include="Assets\Scripts\UselessScripts\NameTextMeshPro.cs" />
     <Compile Include="Assets\Scripts\UselessScripts\PlayerController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />

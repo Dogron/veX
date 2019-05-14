@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ImportantScripts.CharScripts;
 using ImportantScripts.ItemsScripts;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace ImportantScripts.Managers
         public static InventoryManager InventoryManagerIn;
 
         public GameObject inventorySpace;
-        public InventoryGrid[] inventoryGrid;
+        public List<InventoryGrid> inventoryGrid;
 
         public Selectable firstElementToSelect;
         
@@ -109,7 +110,7 @@ namespace ImportantScripts.Managers
                 grid.itemInThisGrid = null;
             }
             
-            for (var i = 0; i < inventoryGrid.Length; i++)
+            for (var i = 0; i < inventoryGrid.Count; i++)
             {
                 if (inventory.ItemsInInventory.Count > i)
                 {

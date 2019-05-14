@@ -16,7 +16,7 @@ namespace ImportantScripts.Managers
 		
 		public GameObject[] EnemySpawns;
 
-		public List<GameObject> Enemies;
+		public int Enemies;
 		
 		public List<Item> AllLoot;
 
@@ -32,10 +32,11 @@ namespace ImportantScripts.Managers
 		
 		private IEnumerator SpawnEnemes()
 		{
-			if (Enemies.Count < 12)
+			Enemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
+			
+			if (Enemies < 12)
 			{
 				var enemy = Instantiate(Enemy);
-				Enemies.Add(enemy);
 				enemy.gameObject.transform.position = EnemySpawns[Random.Range(0, EnemySpawns.Length)].gameObject.transform.position;
 				var enemyc = enemy.GetComponent<Enemy>();
 				enemyc.ChooseHowManyLootOnEnemy();
