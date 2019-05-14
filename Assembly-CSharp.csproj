@@ -93,7 +93,7 @@
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\BulletTurret.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\Dialogue.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\EnemiesScripts\Enemy.cs" />
-    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\EnemiesScripts\EnemyAgentScript.cs" />
+    <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\EnemiesScripts\EnemyMelee.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\EnemiesScripts\EnemyStates.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\NpcType.cs" />
     <Compile Include="Assets\Scripts\ImportantScripts\NPCScripts\SpecialNPC\JamesNpc.cs" />

@@ -15,7 +15,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public int hp;
 
-		private bool _canAttack = true;
+		public bool _canAttack = true;
 
 		// ReSharper disable once InconsistentNaming
 		public EnemyStates EnemyState;
@@ -63,7 +63,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			Destroy(gameObject);
 		}
 
-		private void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
+		public void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
 		{
 			opponent = Char.CharIn.gameObject;
 			EnemyState = enemyState;
@@ -81,7 +81,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 					break;
 				case EnemyStates.Attack:
 					print("Attack");
-					StartCoroutine(AttackStateCoroutine(opponent));
+					AttackStateCoroutine(opponent);
 				    break;
 				case EnemyStates.Searching:
 					StartCoroutine(SearchingStateCoroutine(opponent));
@@ -131,32 +131,9 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 				}
 		}
 
-		private IEnumerator AttackStateCoroutine(GameObject opponent)
+		private void AttackStateCoroutine(GameObject opponent)
 		{
-			print("Attack Coroutine");
-			
-			while (EnemyState == EnemyStates.Attack)
-			{
-				agent.SetDestination(opponent.transform.position);
-				
-				if (Vector3.Distance(opponent.transform.position,gameObject.transform.position) < 3f)
-				{
-					print("distance");
-					
-					if (_canAttack)
-					{
-						print("Attack?");
-						StartCoroutine(Attack(opponent));
-					}
-				}
-
-				if (Vector3.Distance(opponent.transform.position,transform.position) > radiusOfSee)
-				{
-					ChangeStatesFun(EnemyStates.Searching,null);
-				}
-				
-				yield return null;
-			}
+			StartCoroutine(Attack(opponent));
 		}
 
 		public void SetLootOnEnemy(List<Item> items)
@@ -184,21 +161,9 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		}
 
-		private IEnumerator Attack(GameObject other)
+		public virtual IEnumerator Attack(GameObject other)
 		{
-			var charComp = other.GetComponent<Char>();
-			print(charComp != null);
-			
-			if (charComp != null)
-			{
-				_canAttack = false;
-				print(other);
-				print("Attack");
-				charComp.HpNow = charComp.HpNow - attackPower;
-			}
-
-			yield return new WaitForSeconds(reloadSpeed);
-			_canAttack = true;
+			yield return null;
 		}
 
 		public void StartCoroutineDamage(int amount)

@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 65074519582444142}
   - component: {fileID: 54538723972954580}
   - component: {fileID: 65624933743387130}
+  - component: {fileID: -3826591367877160918}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -254,13 +255,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006335457087006}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8094faf62b4749bbad251c9402cf4589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 195180103491615552}
   hp: 8
+  _canAttack: 1
   EnemyState: 0
   speed: 5
   attackPower: 1
@@ -313,6 +315,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5618706, y: 1.2313591, z: 0.4496913}
   m_Center: {x: -0.0033035278, y: 0.36567956, z: 0.023311138}
+--- !u!114 &-3826591367877160918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006335457087006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbb9dc12525f4f0a9da6296947a28836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 195180103491615552}
+  hp: 8
+  _canAttack: 1
+  EnemyState: 0
+  speed: 5
+  attackPower: 1
+  reloadSpeed: 3
+  radiusOfSee: 8
+  lootOnEnemy: []
+  MoneyOnEnemy: 0
+  XpOnEnemy: 0
+  lootPocket: {fileID: 1023797059796234, guid: 64f89ee0626fb48529105b8bdc2905c2, type: 3}
+  howManyLootOnEnemy: 0
 --- !u!1 &1082921867220700
 GameObject:
   m_ObjectHideFlags: 0
