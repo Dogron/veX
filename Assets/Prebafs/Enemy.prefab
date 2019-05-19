@@ -192,7 +192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4762657158218452}
   - component: {fileID: 195180103491615552}
-  - component: {fileID: 114574509142939646}
   - component: {fileID: 65074519582444142}
   - component: {fileID: 54538723972954580}
   - component: {fileID: 65624933743387130}
@@ -248,31 +247,6 @@ NavMeshAgent:
   m_BaseOffset: 0.3
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &114574509142939646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1006335457087006}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8094faf62b4749bbad251c9402cf4589, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 195180103491615552}
-  hp: 8
-  _canAttack: 1
-  EnemyState: 0
-  speed: 5
-  attackPower: 1
-  reloadSpeed: 3
-  radiusOfSee: 8
-  lootOnEnemy: []
-  MoneyOnEnemy: 0
-  XpOnEnemy: 0
-  lootPocket: {fileID: 1023797059796234, guid: 64f89ee0626fb48529105b8bdc2905c2, type: 3}
-  howManyLootOnEnemy: 0
 --- !u!65 &65074519582444142
 BoxCollider:
   m_ObjectHideFlags: 0

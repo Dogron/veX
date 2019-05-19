@@ -6,7 +6,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 {
     public class EnemyMelee : Enemy
     {
-        public override IEnumerator Attack(GameObject other)
+        protected override IEnumerator Attack(GameObject other)
         {
             var charComp = other.GetComponent<Char>();
             print(charComp != null);

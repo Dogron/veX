@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using ImportantScripts.CharScripts;
 using ImportantScripts.ItemsScripts;
-using ImportantScripts.Managers;
+
 using ResourcesAndItems;
 using UnityEngine;
 using UnityEngine.AI;
+using Char = ImportantScripts.CharScripts.Char;
+using Random = UnityEngine.Random;
 
 namespace ImportantScripts.NPCScripts.EnemiesScripts
 {
@@ -31,7 +33,9 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 		public int MoneyOnEnemy;
 		public int XpOnEnemy;
 
-		
+		public delegate void DieDelegate(int a);
+		public DieDelegate d1;
+		public DieDelegate d2;
 		public GameObject lootPocket;
 		
 		public int howManyLootOnEnemy;
@@ -46,6 +50,9 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			}
 			
 			XpOnEnemy = XpOnEnemy + Random.Range(0, 3);
+
+			d1 = Char.CharIn.GetXp;
+			d2 = Char.CharIn.GetMoney;
 		}
 
 		public void ChooseHowManyLootOnEnemy()
@@ -63,7 +70,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 			Destroy(gameObject);
 		}
 
-		public void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
+		protected void ChangeStatesFun(EnemyStates enemyState,GameObject opponent)
 		{
 			opponent = Char.CharIn.gameObject;
 			EnemyState = enemyState;
@@ -86,6 +93,8 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 				case EnemyStates.Searching:
 					StartCoroutine(SearchingStateCoroutine(opponent));
 				    break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(enemyState), enemyState, null);
 			}
 		}
 
@@ -107,7 +116,7 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 					ChangeStatesFun(EnemyStates.Idle, null);
 				}
 
-				if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) < radiusOfSee)
+				if (Vector3.Distance(opponent.transform.position, gameObject.transform.position) <= radiusOfSee)
 				{
 					ChangeStatesFun(EnemyStates.Attack,opponent);
 				}
@@ -138,16 +147,18 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 
 		public void SetLootOnEnemy(List<Item> items)
 		{
-			for (int i = 0; i < howManyLootOnEnemy; i++)
+			for (var i = 0; i < howManyLootOnEnemy; i++)
 			{
 				lootOnEnemy.Add(items[Random.Range(0,items.Count)]);
 			}
 		}
-		
-		public void DropLoot()
+
+		private void DropLoot()
 		{
+			var o = gameObject;
 			// ReSharper disable once InconsistentNaming
-			var _lootPocket = Instantiate(lootPocket,gameObject.transform.position,gameObject.transform.rotation);
+			
+			var _lootPocket = Instantiate(lootPocket,o.transform.position,o.transform.rotation);
 			
 			var lootInLootPocket = _lootPocket.GetComponent<ExpandableItemProvider>();
 			
@@ -156,12 +167,12 @@ namespace ImportantScripts.NPCScripts.EnemiesScripts
 				lootInLootPocket.ItemsInProvider.Add(new Item(loot.itemGameObject,loot.amountOfItem,loot.infoAbout,loot.amountOfResource,loot.isUseble,loot.moneyCost,loot.ItemType,loot.IsItNoStaking,loot.Name));
 			}
 
-			Char.CharIn.GetXp(XpOnEnemy);
-			Char.CharIn.Money += MoneyOnEnemy;
-
+			d2(MoneyOnEnemy);
+			d1(XpOnEnemy);
+			
 		}
 
-		public virtual IEnumerator Attack(GameObject other)
+		protected virtual IEnumerator Attack(GameObject other)
 		{
 			yield return null;
 		}

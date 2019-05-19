@@ -39,8 +39,7 @@ namespace ImportantScripts.CharScripts
 
         public GameObject DroneNow;
         public GameObject Drone;
-        
-        
+
         public int JumpPower;
         public int MaxHp;
         public int HpNow;
@@ -113,7 +112,12 @@ namespace ImportantScripts.CharScripts
                 LvlUp();
             }
         }
-        
+
+        public void GetMoney(int amountOfMoney)
+        {
+            Money += amountOfMoney;
+        }
+       
         private void Awake()
         {
             CharIn = this;

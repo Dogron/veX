@@ -65,7 +65,7 @@ namespace ImportantScripts
 
         private async void ShowNameOfObject()
         {
-            //    await Task.Delay(3000);
+            //await Task.Delay(3000);
             
             if (Physics.Raycast(_lookingtransform.position + _lookingtransform.forward * 0.1f,
                 _lookingtransform.forward, out var hit, 1000))
